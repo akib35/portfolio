@@ -25,7 +25,6 @@ A brief introduction about yourself, your background, and your interests.
 ## Skills
 - Skill 1
 - Skill 2
-- Skill 3
 
 ## Contact
 - **Email:** your.email@example.com
