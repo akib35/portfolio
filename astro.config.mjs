@@ -7,4 +7,9 @@ export default defineConfig({
   build: {
     outDir: 'dist',
   },
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp'
+    }
+  }
 });

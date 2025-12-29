@@ -1,12 +1,13 @@
 ---
 import Navigation from './Navigation.astro';
+import { siteConfig } from '../config';
 ---
 
 <header class="bg-white shadow-sm sticky top-0 z-50">
   <div class="container py-4">
     <div class="flex justify-between items-center">
       <a href="/" class="text-xl font-bold text-gray-900 hover:text-blue-600 no-underline">
-        Your Name
+        {siteConfig.name}
       </a>
       <Navigation />
     </div>

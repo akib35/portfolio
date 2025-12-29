@@ -1,29 +1,30 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { siteConfig } from '../config';
 
 const contactMethods = [
   {
     label: "Email",
-    value: "your@email.com",
-    href: "mailto:your@email.com",
+    value: siteConfig.email,
+    href: `mailto:${siteConfig.email}`,
     icon: "✉️"
   },
   {
     label: "GitHub",
-    value: "github.com/yourusername",
-    href: "https://github.com/yourusername",
+    value: siteConfig.social.github,
+    href: siteConfig.social.github,
     icon: "💻"
   },
   {
     label: "LinkedIn",
-    value: "linkedin.com/in/yourusername",
-    href: "https://linkedin.com/in/yourusername",
+    value: siteConfig.social.linkedin,
+    href: siteConfig.social.linkedin,
     icon: "💼"
   },
   {
     label: "Twitter",
-    value: "@yourusername",
-    href: "https://twitter.com/yourusername",
+    value: siteConfig.social.twitter,
+    href: siteConfig.social.twitter,
     icon: "🐦"
   }
 ];
