@@ -1,0 +1,27 @@
+{
+  "name": "astro-portfolio",
+  "version": "1.0.0",
+  "description": "A simple portfolio project built with Astro, Tailwind CSS, and vanilla JavaScript",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^4.0.0",
+    "@astrojs/tailwind": "^5.1.0",
+    "tailwindcss": "^3.4.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0"
+  },
+  "keywords": [
+    "portfolio",
+    "astro",
+    "tailwindcss"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

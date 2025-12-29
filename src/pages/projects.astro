@@ -1,0 +1,67 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const projects = [
+  {
+    title: "Project One",
+    description: "A web application built with modern technologies. Clean design focused on user experience and performance.",
+    techStack: ["Astro", "Tailwind CSS", "TypeScript"],
+    liveLink: "https://example.com",
+    githubLink: "https://github.com/yourusername/project-one"
+  },
+  {
+    title: "Project Two",
+    description: "An interactive dashboard with data visualization, real-time updates, and comprehensive analytics.",
+    techStack: ["React", "D3.js", "Node.js"],
+    liveLink: "https://example.com",
+    githubLink: "https://github.com/yourusername/project-two"
+  },
+  {
+    title: "Project Three",
+    description: "A responsive e-commerce platform with seamless checkout experience and inventory management.",
+    techStack: ["Next.js", "Stripe", "PostgreSQL"],
+    liveLink: "https://example.com",
+    githubLink: "https://github.com/yourusername/project-three"
+  },
+  {
+    title: "Project Four",
+    description: "A real-time chat application with end-to-end encryption and file sharing capabilities.",
+    techStack: ["Vue.js", "Socket.io", "MongoDB"],
+    liveLink: "https://example.com",
+    githubLink: "https://github.com/yourusername/project-four"
+  },
+  {
+    title: "Project Five",
+    description: "A productivity tool for managing tasks, tracking time, and collaborating with teams.",
+    techStack: ["Svelte", "Firebase", "TailwindCSS"],
+    liveLink: "https://example.com",
+    githubLink: "https://github.com/yourusername/project-five"
+  },
+  {
+    title: "Project Six",
+    description: "An API service for handling authentication, authorization, and user management.",
+    techStack: ["Express.js", "JWT", "Redis"],
+    githubLink: "https://github.com/yourusername/project-six"
+  }
+];
+---
+
+<Layout title="Projects - Your Name">
+  <section class="py-16">
+    <div class="container">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">My Projects</h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          A collection of projects I've worked on. Each one represents a unique challenge and learning experience.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {projects.map((project) => (
+          <ProjectCard {...project} />
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,28 @@
+---
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<nav>
+  <ul class="flex space-x-6">
+    {navItems.map(({ href, label }) => (
+      <li>
+        <a 
+          href={href} 
+          class:list={[
+            "text-gray-600 hover:text-blue-600 font-medium transition-colors no-underline",
+            { "text-blue-600": currentPath === href }
+          ]}
+        >
+          {label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

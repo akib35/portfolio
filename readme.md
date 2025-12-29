@@ -1,34 +1,31 @@
-# Portfolio
+# Astro Portfolio
 
-Welcome to my portfolio! This repository showcases my projects, skills, and experiences.
+This is a simple portfolio project built with Astro, Tailwind CSS, and vanilla JavaScript, focusing on good color schemes and informative content without unnecessary animations.
 
-## Table of Contents
-- [About Me](#about-me)
-- [Projects](#projects)
-- [Skills](#skills)
-- [Contact](#contact)
+## Technologies Used
 
-## About Me
-A brief introduction about yourself, your background, and your interests.
+- **Astro**: A modern static site generator.
+- **Tailwind CSS**: A utility-first CSS framework for styling.
+- **Vanilla JavaScript**: For any interactive functionality.
 
-## Projects
-### Project 1
-- **Description:** A short description of the project.
-- **Technologies Used:** List of technologies used.
-- **Link:** [Project Link](#)
+## Deployment
 
-### Project 2
-- **Description:** A short description of the project.
-- **Technologies Used:** List of technologies used.
-- **Link:** [Project Link](#)
+This project is prepared for deployment on **Cloudflare Pages**. Follow the Cloudflare Pages documentation to deploy your Astro project. Ensure your build command is set to `npm run build` and the output directory is `dist`.
 
-## Skills
-- Skill 1
-- Skill 2
+## Project Structure
 
-## Contact
-- **Email:** your.email@example.com
-- **LinkedIn:** [Your LinkedIn](#)
-- **GitHub:** [Your GitHub](#)
+- **src**: Contains the main source code.
+  - **components**: Reusable components for header, footer, navigation, and project cards.
+  - **pages**: Different pages of the portfolio including home, projects, about, and contact.
+  - **layouts**: Main layout structure for consistent styling across pages.
+  - **styles**: Global styles including Tailwind CSS and custom styles.
+  - **js**: Utility functions for JavaScript functionality.
+  
+- **public**: Static files like `robots.txt`.
 
-Thank you for visiting my portfolio!
+- **config**:
+  - **astro**: Configuration for Astro project.
+  - **tailwind**: Configuration for Tailwind CSS.
+  - **package**: NPM dependencies and scripts.
+  - **tsconfig**: TypeScript configuration.
+  - **readme**: Documentation for project setup and usage.

@@ -9,3 +9,9 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+
+# Ignore AI assistant files
+.CLAUDE
+
+# Ignore node modules
+/node_modules/

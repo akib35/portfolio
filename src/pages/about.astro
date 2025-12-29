@@ -1,0 +1,74 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const skills = [
+  { category: "Frontend", items: ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Astro"] },
+  { category: "Styling", items: ["Tailwind CSS", "CSS-in-JS", "Sass", "Responsive Design"] },
+  { category: "Backend", items: ["Node.js", "Express", "Python", "REST APIs"] },
+  { category: "Tools", items: ["Git", "VS Code", "Figma", "Webpack", "Vite"] },
+];
+---
+
+<Layout title="About - Your Name">
+  <section class="py-16">
+    <div class="container">
+      <div class="max-w-4xl mx-auto">
+        <!-- Intro -->
+        <div class="text-center mb-12">
+          <h1 class="text-4xl font-bold text-gray-900 mb-4">About Me</h1>
+          <p class="text-lg text-gray-600">
+            Developer. Problem solver. Lifelong learner.
+          </p>
+        </div>
+
+        <!-- Bio -->
+        <div class="prose prose-lg max-w-none mb-12">
+          <p class="text-gray-700 mb-4">
+            Hello! I'm <strong>Your Name</strong>, a web developer based in [Your Location]. 
+            I specialize in building responsive, performant websites and web applications 
+            that prioritize user experience and clean code.
+          </p>
+          <p class="text-gray-700 mb-4">
+            My journey into web development started [your story here]. Since then, I've had 
+            the opportunity to work on diverse projects, from small business websites to 
+            complex web applications.
+          </p>
+          <p class="text-gray-700">
+            When I'm not coding, you can find me [your hobbies/interests]. I believe in 
+            continuous learning and always stay curious about new technologies and approaches.
+          </p>
+        </div>
+
+        <!-- Skills -->
+        <div class="mb-12">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Skills & Technologies</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {skills.map(({ category, items }) => (
+              <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">{category}</h3>
+                <div class="flex flex-wrap gap-2">
+                  {items.map((item) => (
+                    <span class="px-3 py-1 bg-blue-50 text-blue-700 text-sm rounded-full">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center bg-gray-100 rounded-lg p-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Let's Work Together</h2>
+          <p class="text-gray-600 mb-6">
+            I'm always open to discussing new projects and opportunities.
+          </p>
+          <a href="/contact" class="btn btn-primary">
+            Get in Touch
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
