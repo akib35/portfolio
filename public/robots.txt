@@ -1,0 +1,11 @@
+# https://www.robotstxt.org/robotstxt.html
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin or private paths (none currently)
+# Disallow: /admin/
+
+# Sitemap location
+Sitemap: https://akib35.me/sitemap-index.xml
