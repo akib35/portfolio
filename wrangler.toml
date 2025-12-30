@@ -1,0 +1,5 @@
+name = "akib-portfolio"
+compatibility_date = "2025-12-30"
+
+[site]
+bucket = "./dist"
