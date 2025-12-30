@@ -11,7 +11,7 @@
     @apply font-bold text-gray-800;
   }
 
-  a {
+  a:not(.btn):not(.no-underline):not([class*="bg-"]) {
     @apply text-blue-600 hover:text-blue-800 transition-colors;
   }
 }
