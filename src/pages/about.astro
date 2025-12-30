@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { siteConfig } from '../config';
 
 const skills = [
   { category: "Frontend", items: ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Astro"] },
@@ -9,7 +10,7 @@ const skills = [
 ];
 ---
 
-<Layout title="About - Your Name">
+<Layout title={`About - ${siteConfig.name}`}>
   <section class="py-16">
     <div class="container">
       <div class="max-w-4xl mx-auto">

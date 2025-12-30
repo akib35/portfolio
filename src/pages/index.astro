@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import { siteConfig } from '../config';
 
 const featuredProjects = [
   {
@@ -25,15 +26,14 @@ const featuredProjects = [
     githubLink: "https://github.com/yourusername/project-three"
   }
 ];
-const name = "Md Akib Hasan";
 ---
 
-<Layout title="{name} - Portfolio">
+<Layout title={`${siteConfig.name} - Portfolio`}>
   <!-- Hero Section -->
   <section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
     <div class="container text-center">
       <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-        Hello, I'm <span class="text-blue-600">{name}</span>
+        Hello, I'm <span class="text-blue-600">{siteConfig.name}</span>
       </h1>
       <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
         A passionate web developer focused on creating beautiful, functional, and user-centered digital experiences.

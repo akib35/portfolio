@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import { siteConfig } from '../config';
 
 const projects = [
   {
@@ -47,7 +48,7 @@ const projects = [
 ];
 ---
 
-<Layout title="Projects - Your Name">
+<Layout title={`Projects - ${siteConfig.name}`}>
   <section class="py-16">
     <div class="container">
       <div class="text-center mb-12">
