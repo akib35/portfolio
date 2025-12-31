@@ -7,25 +7,25 @@ const contactMethods = [
     label: "Email",
     value: siteConfig.email,
     href: `mailto:${siteConfig.email}`,
-    icon: "✉️"
+    icon: "/email.png"
   },
   {
     label: "GitHub",
-    value: siteConfig.social.github,
-    href: siteConfig.social.github,
-    icon: "💻"
+    value: siteConfig.social.github.name,
+    href: siteConfig.social.github.link,
+    icon: "/github-mark/github-mark.svg"
   },
   {
     label: "LinkedIn",
-    value: siteConfig.social.linkedin,
-    href: siteConfig.social.linkedin,
-    icon: "💼"
+    value: siteConfig.social.linkedin.name,
+    href: siteConfig.social.linkedin.link,
+    icon: "/in-logo/InBug-Black.png"
   },
   {
     label: "Twitter",
-    value: siteConfig.social.twitter,
-    href: siteConfig.social.twitter,
-    icon: "🐦"
+    value: siteConfig.social.twitter.name,
+    href: siteConfig.social.twitter.link,
+    icon: "/x-logo/logo-black.png"
   }
 ];
 ---
@@ -50,7 +50,7 @@ const contactMethods = [
               target={href.startsWith("http") ? "_blank" : undefined}
               rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
             >
-              <span class="text-2xl mr-4">{icon}</span>
+              <img src={icon} alt={`${label} icon`} class="w-8 h-8 mr-4" />
               <div>
                 <div class="font-medium text-gray-900">{label}</div>
                 <div class="text-gray-600">{value}</div>
@@ -104,7 +104,7 @@ const contactMethods = [
             </button>
           </form>
           <p class="text-sm text-gray-500 mt-4 text-center">
-            Or email me directly at <a href="mailto:your@email.com">your@email.com</a>
+            Or email me directly at <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
           </p>
         </div>
       </div>

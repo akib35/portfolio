@@ -1,20 +1,21 @@
 ---
+import { siteConfig } from "../config";
 const currentYear = new Date().getFullYear();
 ---
 
 <footer class="bg-gray-800 text-gray-300 py-8">
   <div class="container">
     <div class="flex flex-col md:flex-row justify-between items-center">
-      <p>&copy; {currentYear} Your Name. All rights reserved.</p>
+      <p>&copy; {currentYear} {siteConfig.name}.</p>
       <div class="flex space-x-6 mt-4 md:mt-0">
-        <a href="https://github.com/yourusername" class="hover:text-white no-underline" target="_blank" rel="noopener noreferrer">
-          GitHub
+        <a href={siteConfig.social.github.link} class="hover:text-white no-underline" target="_blank" rel="noopener noreferrer">
+          <img src="/github-mark/github-mark-white.svg" alt={siteConfig.social.github.name} class="w-6 h-6 rounded-full object-cover" />
         </a>
-        <a href="https://linkedin.com/in/yourusername" class="hover:text-white no-underline" target="_blank" rel="noopener noreferrer">
-          LinkedIn
+        <a href={siteConfig.social.linkedin.link} class="hover:text-white no-underline" target="_blank" rel="noopener noreferrer">
+          <img src="/in-logo/InBug-White.png" alt={siteConfig.social.linkedin.name} class="w-7 h-6 object-cover" />
         </a>
-        <a href="mailto:your@email.com" class="hover:text-white no-underline">
-          Email
+        <a href={`mailto:${siteConfig.email}`} class="hover:text-white no-underline">
+          <img src="/public/email.png" alt="Email" class="w-6 h-6  rounded-full object-cover" />
         </a>
       </div>
     </div>
