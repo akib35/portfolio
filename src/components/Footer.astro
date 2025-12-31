@@ -1,20 +1,43 @@
 ---
+import { siteConfig } from "../config";
+import { Image } from 'astro:assets';  // Added for optimized images
 const currentYear = new Date().getFullYear();
 ---
 
 <footer class="bg-gray-800 text-gray-300 py-8">
   <div class="container">
     <div class="flex flex-col md:flex-row justify-between items-center">
-      <p>&copy; {currentYear} Your Name. All rights reserved.</p>
+      <p>&copy; {currentYear} {siteConfig.name}.</p>
       <div class="flex space-x-6 mt-4 md:mt-0">
-        <a href="https://github.com/yourusername" class="hover:text-white no-underline" target="_blank" rel="noopener noreferrer">
-          GitHub
+        <a href={siteConfig.social.github.link} class="hover:text-white no-underline" target="_blank" rel="noopener noreferrer">
+          <Image 
+            src="/github-mark/github-mark-white.svg" 
+            alt="GitHub" 
+            height={35}
+            width={35}
+            loading="lazy"
+            class="w-6 h-6 rounded-full object-cover" 
+          />
         </a>
-        <a href="https://linkedin.com/in/yourusername" class="hover:text-white no-underline" target="_blank" rel="noopener noreferrer">
-          LinkedIn
+        <a href={siteConfig.social.linkedin.link} class="hover:text-white no-underline" target="_blank" rel="noopener noreferrer">
+          <Image 
+            src="/in-logo/InBug-White.png" 
+            alt="LinkedIn" 
+            height={35}
+            width={35} 
+            loading="lazy"
+            class="w-7 h-6 object-cover" 
+          />
         </a>
-        <a href="mailto:your@email.com" class="hover:text-white no-underline">
-          Email
+        <a href={`mailto:${siteConfig.email}`} class="hover:text-white no-underline">
+          <Image 
+            src="/email.svg"
+            alt="Email" 
+            height={35}
+            width={35}
+            loading="lazy"
+            class="w-6 h-6 object-cover" 
+          />
         </a>
       </div>
     </div>

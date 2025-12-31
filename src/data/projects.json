@@ -1,0 +1,49 @@
+[
+  {
+    "featured": true,
+    "title": "Project One",
+    "description": "A web application built with modern technologies. Clean design focused on user experience and performance.",
+    "techStack": ["Astro", "Tailwind CSS", "TypeScript"],
+    "liveLink": "https://example.com",
+    "githubLink": "https://github.com/yourusername/project-one"
+  },
+  {
+    "featured": true,
+    "title": "Project Two",
+    "description": "An interactive dashboard with data visualization, real-time updates, and comprehensive analytics.",
+    "techStack": ["React", "D3.js", "Node.js"],
+    "liveLink": "https://example.com",
+    "githubLink": "https://github.com/yourusername/project-two"
+  },
+  {
+    "featured": false,
+    "title": "Project Three",
+    "description": "A responsive e-commerce platform with seamless checkout experience and inventory management.",
+    "techStack": ["Next.js", "Stripe", "PostgreSQL"],
+    "liveLink": "https://example.com",
+    "githubLink": "https://github.com/yourusername/project-three"
+  },
+  {
+    "featured": false,
+    "title": "Project Four",
+    "description": "A real-time chat application with end-to-end encryption and file sharing capabilities.",
+    "techStack": ["Vue.js", "Socket.io", "MongoDB"],
+    "liveLink": "https://example.com",
+    "githubLink": "https://github.com/yourusername/project-four"
+  },
+  {
+    "featured": false,
+    "title": "Project Five",
+    "description": "A productivity tool for managing tasks, tracking time, and collaborating with teams.",
+    "techStack": ["Svelte", "Firebase", "TailwindCSS"],
+    "liveLink": "https://example.com",
+    "githubLink": "https://github.com/yourusername/project-five"
+  },
+  {
+    "featured": false,
+    "title": "Project Six",
+    "description": "An API service for handling authentication, authorization, and user management.",
+    "techStack": ["Express.js", "JWT", "Redis"],
+    "githubLink": "https://github.com/yourusername/project-six"
+  }
+]
