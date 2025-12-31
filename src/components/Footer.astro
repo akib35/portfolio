@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from "../config";
+import { Image } from 'astro:assets';  // Added for optimized images
 const currentYear = new Date().getFullYear();
 ---
 
@@ -9,13 +10,34 @@ const currentYear = new Date().getFullYear();
       <p>&copy; {currentYear} {siteConfig.name}.</p>
       <div class="flex space-x-6 mt-4 md:mt-0">
         <a href={siteConfig.social.github.link} class="hover:text-white no-underline" target="_blank" rel="noopener noreferrer">
-          <img src="/github-mark/github-mark-white.svg" alt={siteConfig.social.github.name} class="w-6 h-6 rounded-full object-cover" />
+          <Image 
+            src="/github-mark/github-mark-white.svg" 
+            alt="GitHub" 
+            height={35}
+            width={35}
+            loading="lazy"
+            class="w-6 h-6 rounded-full object-cover" 
+          />
         </a>
         <a href={siteConfig.social.linkedin.link} class="hover:text-white no-underline" target="_blank" rel="noopener noreferrer">
-          <img src="/in-logo/InBug-White.png" alt={siteConfig.social.linkedin.name} class="w-7 h-6 object-cover" />
+          <Image 
+            src="/in-logo/InBug-White.png" 
+            alt="LinkedIn" 
+            height={35}
+            width={35} 
+            loading="lazy"
+            class="w-7 h-6 object-cover" 
+          />
         </a>
         <a href={`mailto:${siteConfig.email}`} class="hover:text-white no-underline">
-          <img src="/public/email.png" alt="Email" class="w-6 h-6  rounded-full object-cover" />
+          <Image 
+            src="/email.svg"
+            alt="Email" 
+            height={35}
+            width={35}
+            loading="lazy"
+            class="w-6 h-6 object-cover" 
+          />
         </a>
       </div>
     </div>
