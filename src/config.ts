@@ -1,4 +1,5 @@
 export const siteConfig = {
+  
   name: "Akib Hasan",
   email: "writetoakibhasan@gmail.com",
   phone: "+1 234 567 8900",
