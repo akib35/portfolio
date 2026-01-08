@@ -1,34 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 
-interface BlogPost {
-  title: string;
-  date: string;
-  excerpt: string;
-  slug: string;
-  content: string;
-}
-
-const modules = import.meta.glob<{ frontmatter: Record<string, any>; default: string }>('../../data/blog/*.md', { eager: true });
-
-const posts: BlogPost[] = [];
-
-for (const path in modules) {
-  const module = modules[path];
-  const slug = path.split('/').pop()?.replace('.md', '') || '';
-  
-  if (module.frontmatter) {
-    posts.push({
-      slug,
-      title: module.frontmatter.title || 'Untitled',
-      date: module.frontmatter.date || new Date().toISOString(),
-      excerpt: module.frontmatter.excerpt || '',
-      content: module.default || '',
-    });
-  }
-}
-
-const sortedPosts = posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+const blogPosts = await getCollection('blog');
+const sortedPosts = blogPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
 <Layout title="Blog">
@@ -44,13 +19,13 @@ const sortedPosts = posts.sort((a, b) => new Date(b.date).getTime() - new Date(a
           <article class="border-b pb-6 last:border-b-0">
             <a href={`/blog/${post.slug}`} class="group no-underline">
               <h2 class="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
-                {post.title}
+                {post.data.title}
               </h2>
             </a>
             <p class="text-gray-600 text-sm mb-3">
-              {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
-            <p class="text-gray-700">{post.excerpt}</p>
+            <p class="text-gray-700">{post.data.excerpt}</p>
             <a href={`/blog/${post.slug}`} class="inline-block mt-3 text-blue-600 hover:text-blue-700 font-medium">
               Read More →
             </a>

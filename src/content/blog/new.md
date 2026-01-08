@@ -1,7 +1,7 @@
 ---
-title: Your Post Title
+title: "Your Post Title"
 date: 2026-01-07
-excerpt: A short summary of your post
+excerpt: "A short summary of your post"
 ---
 
 # Your Post Title

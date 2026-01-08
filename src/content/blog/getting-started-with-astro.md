@@ -1,7 +1,7 @@
 ---
-title: Getting Started with Astro
+title: "Getting Started with Astro"
 date: 2024-01-15
-excerpt: Learn the basics of building fast and modern websites with Astro
+excerpt: "Learn the basics of building fast and modern websites with Astro"
 ---
 
 # Getting Started with Astro
