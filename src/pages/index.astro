@@ -3,9 +3,16 @@ import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { siteConfig } from '../config';
 import { projects } from '../data/projects';
-const name = siteConfig.name;
+import { getCollection } from 'astro:content';
 
+const name = siteConfig.name;
 const featuredProjects = projects.filter(project => project.featured);
+
+// Get recent blog posts
+const allPosts = await getCollection('blog');
+const recentPosts = allPosts
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
 
 const gridClasses = featuredProjects.length === 1 ? 'grid-cols-1' :
   featuredProjects.length === 2 ? 'grid-cols-1 md:grid-cols-2' :
@@ -14,55 +21,90 @@ const gridClasses = featuredProjects.length === 1 ? 'grid-cols-1' :
 
 <Layout title={`${siteConfig.name} - Portfolio`}>
   <!-- Hero Section -->
-  <section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
+  <section class="py-24 bg-gradient-to-br from-gray-50 via-white to-gray-100">
     <div class="container text-center">
-      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-        Hello, I'm <span id="typewriter" class="text-blue-600" data-name={name}></span>
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+        Hi, I'm <span id="typewriter" class="text-blue-600" data-name={name}></span>
       </h1>
-      <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-        A passionate web developer focused on creating beautiful, functional, and user-centered digital experiences.
+      <p class="text-xl text-gray-600 max-w-xl mx-auto mb-10 leading-relaxed">
+        I build clean, performant web experiences with modern technologies.
       </p>
       <div class="flex justify-center gap-4">
         <a href="/projects" class="btn btn-primary">
           View My Work
         </a>
-        <a href="/contact" class="btn btn-secondary">
-          Get in Touch
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- About Preview Section -->
-  <section class="py-16 bg-gray-100">
-    <div class="container">
-      <div class="max-w-3xl mx-auto text-center">
-        <h2 class="text-3xl font-bold text-gray-900 mb-6">About Me</h2>
-        <p class="text-lg text-gray-600 mb-6">
-          I'm a developer who cares about writing clean code and building products that make a difference. 
-          With expertise in modern web technologies, I bring ideas to life through thoughtful design and solid engineering.
-        </p>
-        <a href="/about" class="text-blue-600 hover:text-blue-800 font-medium">
-          Learn more about me →
+        <a href="/about" class="btn btn-secondary">
+          Know Me More
         </a>
       </div>
     </div>
   </section>
 
   <!-- Featured Projects Section -->
-  <section class="py-16">
+  <section class="py-20">
     <div class="container">
-      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">
-        Featured Projects
-      </h2>
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-3">Featured Projects</h2>
+        <p class="text-gray-600">Some things I've built recently</p>
+      </div>
       <div class={`grid gap-6 justify-center ${gridClasses}`}>
         {featuredProjects.map((project) => (
           <ProjectCard {...project} />
         ))}
       </div>
+      <div class="text-center mt-10">
+        <a href="/projects" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1">
+          View all projects <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Section -->
+  <section class="py-20 bg-gray-50">
+    <div class="container">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-3">Latest Posts</h2>
+        <p class="text-gray-600">Thoughts on development and things I'm learning</p>
+      </div>
+      <div class="max-w-2xl mx-auto space-y-4">
+        {recentPosts.map((post) => (
+          <a 
+            href={`/blog/${post.slug}`} 
+            class="block p-5 bg-white rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all no-underline group"
+          >
+            <div class="flex justify-between items-start gap-4">
+              <div>
+                <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
+                  {post.data.title}
+                </h3>
+                <p class="text-gray-600 text-sm line-clamp-1">{post.data.excerpt}</p>
+              </div>
+              <time class="text-sm text-gray-400 whitespace-nowrap">
+                {new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              </time>
+            </div>
+          </a>
+        ))}
+      </div>
       <div class="text-center mt-8">
-        <a href="/projects" class="btn btn-secondary">
-          View All Projects →
+        <a href="/blog" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1">
+          Read all posts <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Simple CTA Section -->
+  <section class="py-20">
+    <div class="container">
+      <div class="max-w-2xl mx-auto text-center">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Let's Work Together</h2>
+        <p class="text-gray-600 mb-8">
+          I'm currently available for freelance work and interesting collaborations.
+        </p>
+        <a href="/contact" class="btn btn-primary">
+          Get in Touch
         </a>
       </div>
     </div>
@@ -74,3 +116,12 @@ const gridClasses = featuredProjects.length === 1 ? 'grid-cols-1' :
   import { initTypewriter } from '../scripts/typewriter';
   initTypewriter();
 </script>
+
+<style>
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
