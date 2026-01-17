@@ -117,6 +117,12 @@ To add new projects, update the `src/data/projects.json` file with the new proje
 - `liveLink`: (Optional) URL to live demo
 - `githubLink`: URL to GitHub repository
 
+## 👀 Coming Soon
+
+A few features are comming soon as the project grows, including:
+- Limit send message option
+- refined blog posts
+
 ## 🤝 Contributing
 
 Contributions are limited but suggestions are welcome! Please feel free to submit a Pull Request.
