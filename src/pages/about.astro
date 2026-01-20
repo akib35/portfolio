@@ -2,10 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import { siteConfig } from '../config';
 
-const skills = [
-  "JavaScript", "TypeScript", "React", "Astro", "Node.js", "Python",
-  "Tailwind CSS", "Git", "REST APIs", "Responsive Design"
-];
+const programmingLanguages = ["Python", "C++", "C", "Go", "JavaScript", "Java"];
+const frameworks = ["Django", "React", "Bootstrap", "Flutter"];
+const tools = ["Git", "REST API", "SQL", "Docker", "Linux", "PostgreSQL"];
+const softwareDesign = ["SOLID", "Design Patterns"];
+const interests = ["Parallel Computing", "Cloud Computing", "Computer Security"];
 ---
 
 <Layout title={`About - ${siteConfig.name}`}>
@@ -16,28 +17,82 @@ const skills = [
         <div class="mb-12">
           <h1 class="text-4xl font-bold text-gray-900 mb-6">About Me</h1>
           <p class="text-lg text-gray-600 leading-relaxed mb-4">
-            I'm <strong class="text-gray-900">{siteConfig.name}</strong>, a web developer based in {siteConfig.location}. 
-            I enjoy building things for the web—whether it's a simple landing page or a complex application.
+            I'm <strong class="text-gray-900">{siteConfig.name}</strong>, a Computer Science graduate from 
+            Chittagong University of Engineering and Technology (CUET) based in {siteConfig.location}.
           </p>
           <p class="text-lg text-gray-600 leading-relaxed mb-4">
-            My focus is on writing clean, maintainable code and creating experiences that are both 
-            functional and pleasant to use. I believe in simplicity and attention to detail.
+            I'm passionate about building full-stack web applications, mobile apps, and solving complex problems. 
+            I have experience with Django, React, Flutter, and various backend technologies including PostgreSQL and Docker.
+          </p>
+          <p class="text-lg text-gray-600 leading-relaxed mb-4">
+            I've solved <strong class="text-gray-900">200+ problems</strong> on platforms like LeetCode, Codeforces, 
+            HackerRank, and AtCoder, which has strengthened my algorithmic thinking and problem-solving abilities.
           </p>
           <p class="text-lg text-gray-600 leading-relaxed">
-            When I'm not coding, you'll find me exploring new technologies, reading, or working on 
-            side projects that help me grow as a developer.
+            My interests include Parallel Computing, Cloud Computing, and Computer Security. I'm always eager to 
+            learn new technologies and take on challenging projects.
           </p>
         </div>
 
         <!-- Skills -->
         <div class="mb-12">
-          <h2 class="text-2xl font-bold text-gray-900 mb-4">Skills</h2>
-          <div class="flex flex-wrap gap-2">
-            {skills.map((skill) => (
-              <span class="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-lg">
-                {skill}
-              </span>
-            ))}
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">Skills</h2>
+          
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Programming Languages</h3>
+              <div class="flex flex-wrap gap-2">
+                {programmingLanguages.map((skill) => (
+                  <span class="px-3 py-1.5 bg-blue-50 text-blue-700 text-sm rounded-lg">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Frameworks & Libraries</h3>
+              <div class="flex flex-wrap gap-2">
+                {frameworks.map((skill) => (
+                  <span class="px-3 py-1.5 bg-green-50 text-green-700 text-sm rounded-lg">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Tools & Technologies</h3>
+              <div class="flex flex-wrap gap-2">
+                {tools.map((skill) => (
+                  <span class="px-3 py-1.5 bg-purple-50 text-purple-700 text-sm rounded-lg">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Software Design</h3>
+              <div class="flex flex-wrap gap-2">
+                {softwareDesign.map((skill) => (
+                  <span class="px-3 py-1.5 bg-orange-50 text-orange-700 text-sm rounded-lg">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Interests</h3>
+              <div class="flex flex-wrap gap-2">
+                {interests.map((interest) => (
+                  <span class="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-lg">
+                    {interest}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
