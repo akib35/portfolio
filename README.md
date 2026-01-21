@@ -1,152 +1,175 @@
-# Astro Portfolio
+# Md Akib Hasan - Portfolio
 
-A modern, responsive portfolio website built with Astro, showcasing full-stack development projects and skills. This project emphasizes clean design, fast performance, and informative content without unnecessary animations.
+[![Build and Check](https://github.com/akib35/portfolio/actions/workflows/astro.yml/badge.svg)](https://github.com/akib35/portfolio/actions/workflows/astro.yml)
 
-## 🚀 Features
+A modern, responsive portfolio website built with Astro, showcasing full-stack development projects, skills, and blog posts. Features clean design, fast performance, and SEO optimization.
 
-- **Responsive Design**: Optimized for all devices using Tailwind CSS
-- **Fast Performance**: Built with Astro for static site generation and optimal loading times
-- **SEO Optimized**: Includes sitemap generation and meta tags
-- **TypeScript Support**: Type-safe development with TypeScript
-- **Component-Based Architecture**: Reusable components for maintainable code
-- **Project Showcase**: Dedicated section highlighting development projects
+🌐 **Live Site**: [https://akib35.me](https://akib35.me)
 
-## 🛠️ Technologies Used
+## ✨ Features
 
-- **Astro**: Modern static site generator for fast web applications
-- **Tailwind CSS**: Utility-first CSS framework for responsive styling
-- **TypeScript**: Typed JavaScript for better development experience
-- **Vanilla JavaScript**: For interactive functionality
-- **Sharp**: Image optimization service
-- **PostCSS & Autoprefixer**: CSS processing and browser compatibility
+- **Responsive Design** - Optimized for all devices using Tailwind CSS
+- **Fast Performance** - Static site generation with Astro for optimal loading times
+- **SEO Optimized** - Meta tags, Open Graph, Twitter cards, sitemap, and robots.txt
+- **Blog System** - Markdown-based blog with content collections
+- **Contact Form** - Protected with Cloudflare Turnstile CAPTCHA, powered by Formspree
+- **TypeScript** - Type-safe development with strict mode
+- **Testing** - Unit tests with Vitest
+- **CI/CD** - Automated builds and tests with GitHub Actions
 
-## 📦 Installation
+## 🛠️ Tech Stack
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/akib35/astro-portfolio.git
-   cd astro-portfolio
-   ```
+| Category | Technologies |
+|----------|-------------|
+| Framework | [Astro](https://astro.build) |
+| Styling | [Tailwind CSS](https://tailwindcss.com) |
+| Language | TypeScript, JavaScript |
+| Testing | [Vitest](https://vitest.dev) |
+| Deployment | [Cloudflare Pages](https://pages.cloudflare.com) |
+| Form Handling | [Formspree](https://formspree.io) |
+| Bot Protection | [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) |
 
-2. Install dependencies using pnpm:
-   ```bash
-   pnpm install
-   ```
+## 📦 Getting Started
 
-## 🚀 Usage
+### Prerequisites
 
-- **Development Server**: Start the development server with hot reload
-  ```bash
-  pnpm dev
-  ```
-  Visit `http://localhost:4321` to view the site.
+- [Node.js](https://nodejs.org) (v18 or higher)
+- [pnpm](https://pnpm.io) (recommended)
 
-- **Build for Production**:
-  ```bash
-  pnpm build
-  ```
+### Installation
 
-- **Preview Production Build**:
-  ```bash
-  pnpm preview
-  ```
+```bash
+# Clone the repository
+git clone https://github.com/akib35/portfolio.git
+cd portfolio
+
+# Install dependencies
+pnpm install
+```
+
+### Development
+
+```bash
+# Start development server
+pnpm dev
+```
+
+Visit `http://localhost:4321` to view the site.
+
+### Commands
+
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start development server with hot reload |
+| `pnpm build` | Build for production |
+| `pnpm preview` | Preview production build locally |
+| `pnpm test` | Run tests once |
+| `pnpm test:watch` | Run tests in watch mode |
 
 ## 📁 Project Structure
 
 ```
-astro-portfolio/
-├── astro.config.mjs          # Astro configuration
-├── package.json              # Project dependencies and scripts
-├── tailwind.config.cjs       # Tailwind CSS configuration
-├── tsconfig.json             # TypeScript configuration
-├── public/                   # Static assets
-│   ├── robots.txt
-│   └── github-mark/          # Social media icons
+portfolio/
+├── .github/workflows/        # GitHub Actions CI/CD
+├── public/                   # Static assets (images, CV, favicon)
 ├── src/
 │   ├── components/           # Reusable Astro components
-│   │   ├── Footer.astro
 │   │   ├── Header.astro
+│   │   ├── Footer.astro
 │   │   ├── Navigation.astro
 │   │   └── ProjectCard.astro
+│   ├── content/              # Content collections
+│   │   ├── config.ts         # Collection schemas
+│   │   └── blog/             # Blog posts (Markdown)
+│   ├── data/                 # Data files
+│   │   ├── projects.json     # Projects data
+│   │   └── projects.ts       # Projects type definitions
 │   ├── layouts/
-│   │   └── Layout.astro      # Main layout component
-│   ├── pages/                # Astro pages
-│   │   ├── index.astro       # Home page
-│   │   ├── projects.astro    # Projects showcase
-│   │   ├── about.astro       # About page
-│   │   └── contact.astro     # Contact page
-│   ├── scripts/
-│   │   └── typewriter.ts     # Typewriter effect script
-│   ├── styles/
-│   │   └── global.css        # Global styles
-│   ├── js/
-│   │   └── utils.js          # Utility functions
+│   │   └── Layout.astro      # Main layout with SEO
+│   ├── pages/                # Route pages
+│   │   ├── index.astro       # Home
+│   │   ├── about.astro       # About
+│   │   ├── projects.astro    # Projects
+│   │   ├── contact.astro     # Contact form
+│   │   ├── 404.astro         # Custom 404 page
+│   │   └── blog/             # Blog pages
+│   ├── scripts/              # Client-side scripts
+│   ├── styles/               # Global styles
 │   └── config.ts             # Site configuration
-└── temp/                     # Temporary files (can be removed)
+├── tests/                    # Unit tests
+├── astro.config.mjs          # Astro configuration
+├── tailwind.config.cjs       # Tailwind configuration
+├── vitest.config.ts          # Vitest configuration
+└── tsconfig.json             # TypeScript configuration
 ```
 
 ## 🌐 Deployment
 
-This project is configured for deployment on **Cloudflare Pages**:
+This project is deployed on **Cloudflare Pages** with automatic deployments on push to main.
 
-1. Connect your GitHub repository to Cloudflare Pages
-2. Set build settings:
-   - **Build command**: `pnpm build`
-   - **Build output directory**: `dist`
-3. Deploy automatically on push to main branch
+### Build Settings
 
-The site is live at: [https://akib35.me](https://akib35.me)
+- **Build command**: `pnpm build`
+- **Build output directory**: `dist`
+- **Node.js version**: 18
 
-## 📋 Projects Showcase
+## 📋 Adding Content
 
-The portfolio features a dedicated projects section displaying various development projects, including:
+### New Project
 
-- **Project One**: Web application with modern technologies
-- **Project Two**: Interactive dashboard with data visualization
-- **Project Three**: E-commerce platform with payment integration
-- **Project Four**: Real-time chat application
-- **Project Five**: Productivity tool for team collaboration
-- **Project Six**: API service for authentication and user management
+Edit `src/data/projects.json`:
 
-Each project card includes technology stack, live demo links, and GitHub repository links.
+```json
+{
+  "featured": true,
+  "title": "Project Name",
+  "description": "Brief description",
+  "techStack": ["Tech1", "Tech2"],
+  "liveLink": "https://example.com",
+  "githubLink": "https://github.com/user/repo"
+}
+```
 
-To add new projects, update the `src/data/projects.json` file with the new project details. The JSON structure for each project includes:
-- `title`: Project name
-- `description`: Brief description
-- `techStack`: Array of technologies used
-- `liveLink`: (Optional) URL to live demo
-- `githubLink`: URL to GitHub repository
+### New Blog Post
 
-## 👀 Coming Soon
+Create a new `.md` file in `src/content/blog/`:
 
-A few features are comming soon as the project grows, including:
-- Limit send message option
-- refined blog posts
+```markdown
+---
+title: "Your Post Title"
+date: 2026-01-21
+excerpt: "Brief excerpt for the post"
+---
 
-## 🤝 Contributing
+Your content here...
+```
 
-Contributions are limited but suggestions are welcome! Please feel free to submit a Pull Request.
+## 🧪 Testing
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+```bash
+# Run all tests
+pnpm test
 
-## 📄 License
+# Run tests in watch mode
+pnpm test:watch
+```
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 🚀 Upcoming Features
+
+- **Limit send message option** - Rate limiting for contact form submissions
+- **Refined blog posts** - Enhanced blog styling and features
+- **Background based on season** - Dynamic seasonal themes
 
 ## 👤 Author
 
 **Md Akib Hasan**
-- Email: writetoakibhasan@gmail.com
-- Phone: +1 234 567 8900
-- Location: Dhaka, Bangladesh
-- LinkedIn: [akibH](https://linkedin.com/in/akibH)
-- GitHub: [akib35](https://github.com/akib35)
-- Twitter: [mdakibhasan18](https://twitter.com/mdakibhasan18)
 
-## 📞 Contact
+- 🌐 Website: [akib35.me](https://akib35.me)
+- 📧 Email: [writetoakibhasan@gmail.com](mailto:writetoakibhasan@gmail.com)
+- 💼 LinkedIn: [akibH](https://linkedin.com/in/akibH)
+- 🐙 GitHub: [akib35](https://github.com/akib35)
+- 🐦 Twitter: [mdakibhasan18](https://twitter.com/mdakibhasan18)
 
-Feel free to reach out for collaborations, opportunities, or just to say hello!
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

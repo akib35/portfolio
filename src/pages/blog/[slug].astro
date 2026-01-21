@@ -5,9 +5,6 @@ import '../../styles/blog.css';
 
 export async function getStaticPaths() {
   const blogPosts = await getCollection('blog');
-  console.log('Found blog posts:', blogPosts.length);
-  console.log('Blog post slugs:', blogPosts.map(p => p.slug));
-  
   return blogPosts.map(post => ({
     params: { slug: post.slug },
     props: { post }
