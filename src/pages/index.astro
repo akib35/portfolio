@@ -1,127 +1,339 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import { siteConfig } from '../config';
-import { projects } from '../data/projects';
-import { getCollection } from 'astro:content';
+import Layout from "../layouts/Layout.astro"
+import ProjectCard from "../components/ProjectCard.astro"
+import { siteConfig } from "../config"
+import { projects } from "../data/projects"
+import { getCollection } from "astro:content"
 
-const name = siteConfig.name;
-const featuredProjects = projects.filter(project => project.featured);
+const name = siteConfig.name
+const featuredProjects = projects.filter((project) => project.featured)
 
 // Get recent blog posts
-const allPosts = await getCollection('blog');
+const allPosts = await getCollection("blog")
 const recentPosts = allPosts
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 3);
+	.sort(
+		(a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+	)
+	.slice(0, 3)
 
-const gridClasses = featuredProjects.length === 1 ? 'grid-cols-1' :
-  featuredProjects.length === 2 ? 'grid-cols-1 md:grid-cols-2' :
-  'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+const gridClasses =
+	featuredProjects.length === 1
+		? "grid-cols-1"
+		: featuredProjects.length === 2
+			? "grid-cols-1 md:grid-cols-2"
+			: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
 ---
 
 <Layout title={`${siteConfig.name} - Portfolio`}>
-  <!-- Hero Section -->
-  <section class="py-24 bg-gradient-to-br from-gray-50 via-white to-gray-100">
-    <div class="container text-center">
-      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-        Hi, I'm <span id="typewriter" class="text-blue-600" data-name={name}></span>
-      </h1>
-      <p class="text-xl text-gray-600 max-w-xl mx-auto mb-10 leading-relaxed">
-        CSE graduate from CUET. Full-stack developer passionate about building web apps, mobile apps, and solving algorithmic challenges.
-      </p>
-      <div class="flex justify-center gap-4">
-        <a href="/projects" class="btn btn-primary">
-          View My Work
-        </a>
-        <a href="/about" class="btn btn-secondary">
-          Know Me More
-        </a>
-      </div>
-    </div>
-  </section>
+	<!-- Hero Section with Particle Background -->
+	<section
+		class="relative py-24 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden transition-colors">
+		<!-- Particle container -->
+		<div id="particles-js" class="absolute inset-0 -z-10" aria-hidden="true">
+		</div>
 
-  <!-- Featured Projects Section -->
-  <section class="py-20">
-    <div class="container">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-gray-900 mb-3">Featured Projects</h2>
-        <p class="text-gray-600">Some things I've built recently</p>
-      </div>
-      <div class={`grid gap-6 justify-center ${gridClasses}`}>
-        {featuredProjects.map((project) => (
-          <ProjectCard {...project} />
-        ))}
-      </div>
-      <div class="text-center mt-10">
-        <a href="/projects" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1">
-          View all projects <span aria-hidden="true">→</span>
-        </a>
-      </div>
-    </div>
-  </section>
+		<div class="container text-center relative z-10">
+			<h1
+				class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 animate-fade-in">
+				Hi, I'm <span id="typewriter" class="text-gradient" data-name={name}
+				></span><span class="animate-pulse">|</span>
+			</h1>
+			<p
+				class="text-xl text-gray-600 dark:text-gray-300 max-w-xl mx-auto mb-10 leading-relaxed animate-fade-in-up">
+				CSE graduate from CUET. Full-stack developer passionate about building
+				web apps, mobile apps, and solving algorithmic challenges.
+			</p>
+			<div class="flex flex-wrap justify-center gap-4 animate-fade-in-up">
+				<a href="/projects" class="btn btn-primary"> View My Work </a>
+				<a href="/about" class="btn btn-secondary"> Know Me More </a>
+			</div>
+		</div>
+	</section>
 
-  <!-- Blog Section -->
-  <section class="py-20 bg-gray-50">
-    <div class="container">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-gray-900 mb-3">Latest Posts</h2>
-        <p class="text-gray-600">Thoughts on development and things I'm learning</p>
-      </div>
-      <div class="max-w-2xl mx-auto space-y-4">
-        {recentPosts.map((post) => (
-          <a 
-            href={`/blog/${post.slug}`} 
-            class="block p-5 bg-white rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all no-underline group"
-          >
-            <div class="flex justify-between items-start gap-4">
-              <div>
-                <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
-                  {post.data.title}
-                </h3>
-                <p class="text-gray-600 text-sm line-clamp-1">{post.data.excerpt}</p>
-              </div>
-              <time class="text-sm text-gray-400 whitespace-nowrap">
-                {new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-              </time>
-            </div>
-          </a>
-        ))}
-      </div>
-      <div class="text-center mt-8">
-        <a href="/blog" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1">
-          Read all posts <span aria-hidden="true">→</span>
-        </a>
-      </div>
-    </div>
-  </section>
+	<!-- Featured Projects Section -->
+	<section class="py-20 bg-white dark:bg-gray-800 transition-colors">
+		<div class="container">
+			<div class="text-center mb-12">
+				<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+					Featured Projects
+				</h2>
+				<p class="text-gray-600 dark:text-gray-400">
+					Some things I've built recently
+				</p>
+			</div>
+			<div class={`grid gap-6 justify-center ${gridClasses}`}>
+				{
+					featuredProjects.map((project, index) => (
+						<div
+							class="animate-on-scroll"
+							style={`animation-delay: ${index * 100}ms`}>
+							<ProjectCard {...project} />
+						</div>
+					))
+				}
+			</div>
+			<div class="text-center mt-10">
+				<a
+					href="/projects"
+					class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium inline-flex items-center gap-1 transition-colors no-underline">
+					View all projects <span aria-hidden="true">→</span>
+				</a>
+			</div>
+		</div>
+	</section>
 
-  <!-- Simple CTA Section -->
-  <section class="py-20">
-    <div class="container">
-      <div class="max-w-2xl mx-auto text-center">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">Let's Work Together</h2>
-        <p class="text-gray-600 mb-8">
-          I'm currently available for freelance work and interesting collaborations.
-        </p>
-        <a href="/contact" class="btn btn-primary">
-          Get in Touch
-        </a>
-      </div>
-    </div>
-  </section>
+	<!-- Blog Section -->
+	<section class="py-20 bg-gray-50 dark:bg-gray-900 transition-colors">
+		<div class="container">
+			<div class="text-center mb-12">
+				<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+					Latest Posts
+				</h2>
+				<p class="text-gray-600 dark:text-gray-400">
+					Thoughts on development and things I'm learning
+				</p>
+			</div>
+			<div class="max-w-2xl mx-auto space-y-4">
+				{
+					recentPosts.map((post, index) => (
+						<a
+							href={`/blog/${post.slug}`}
+							class="block p-5 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-md dark:hover:shadow-blue-900/20 transition-all no-underline group animate-on-scroll"
+							style={`animation-delay: ${index * 100}ms`}
+							transition:name={`blog-${post.slug}`}>
+							<div class="flex justify-between items-start gap-4">
+								<div>
+									<h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1">
+										{post.data.title}
+									</h3>
+									<p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-1">
+										{post.data.excerpt}
+									</p>
+								</div>
+								<time class="text-sm text-gray-400 dark:text-gray-500 whitespace-nowrap">
+									{new Date(post.data.date).toLocaleDateString("en-US", {
+										month: "short",
+										day: "numeric",
+									})}
+								</time>
+							</div>
+						</a>
+					))
+				}
+			</div>
+			<div class="text-center mt-8">
+				<a
+					href="/blog"
+					class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium inline-flex items-center gap-1 transition-colors no-underline">
+					Read all posts <span aria-hidden="true">→</span>
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- Simple CTA Section -->
+	<section class="py-20 bg-white dark:bg-gray-800 transition-colors">
+		<div class="container">
+			<div class="max-w-2xl mx-auto text-center">
+				<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+					Let's Work Together
+				</h2>
+				<p class="text-gray-600 dark:text-gray-400 mb-8">
+					I'm currently available for freelance work and interesting
+					collaborations.
+				</p>
+				<a href="/contact" class="btn btn-primary"> Get in Touch </a>
+			</div>
+		</div>
+	</section>
 </Layout>
 
-<!-- Client-side script (runs in browser) -->
+<!-- Client-side scripts -->
 <script>
-  import { initTypewriter } from '../scripts/typewriter';
-  initTypewriter();
+	import { initTypewriter } from "../scripts/typewriter"
+
+	function initPage() {
+		initTypewriter()
+		initScrollAnimations()
+	}
+
+	function initScrollAnimations() {
+		// Check for reduced motion preference
+		const prefersReducedMotion = window.matchMedia(
+			"(prefers-reduced-motion: reduce)",
+		).matches
+		if (prefersReducedMotion) {
+			// Make all elements visible immediately
+			document.querySelectorAll(".animate-on-scroll").forEach((el) => {
+				el.classList.add("is-visible")
+			})
+			return
+		}
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						entry.target.classList.add("is-visible")
+					}
+				})
+			},
+			{
+				threshold: 0.1,
+				rootMargin: "0px 0px -50px 0px",
+			},
+		)
+
+		document.querySelectorAll(".animate-on-scroll").forEach((el) => {
+			observer.observe(el)
+		})
+	}
+
+	// Initialize on page load
+	initPage()
+
+	// Re-initialize after View Transitions
+	document.addEventListener("astro:after-swap", initPage)
+</script>
+
+<!-- Particle.js library (loaded from CDN for simplicity) -->
+<script
+	is:inline
+	src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.12.0/tsparticles.slim.bundle.min.js"
+	defer></script>
+<script is:inline>
+	function initParticles() {
+		if (typeof tsParticles === "undefined") return
+
+		const isDark = document.documentElement.classList.contains("dark")
+		const particleColor = isDark ? "#60a5fa" : "#3b82f6"
+		const linkColor = isDark ? "#60a5fa" : "#93c5fd"
+
+		tsParticles.load("particles-js", {
+			particles: {
+				number: { value: 50, density: { enable: true, area: 800 } },
+				color: { value: particleColor },
+				shape: { type: "circle" },
+				opacity: { value: 0.5, random: true },
+				size: { value: 3, random: true },
+				links: {
+					enable: true,
+					distance: 150,
+					color: linkColor,
+					opacity: 0.3,
+					width: 1,
+				},
+				move: {
+					enable: true,
+					speed: 1,
+					direction: "none",
+					random: false,
+					straight: false,
+					outModes: "out",
+				},
+			},
+			interactivity: {
+				events: {
+					onHover: { enable: true, mode: "grab" },
+					resize: true,
+				},
+				modes: {
+					grab: { distance: 140, links: { opacity: 0.5 } },
+				},
+			},
+			detectRetina: true,
+		})
+	}
+
+	// Wait for tsParticles to load
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", () =>
+			setTimeout(initParticles, 100),
+		)
+	} else {
+		setTimeout(initParticles, 100)
+	}
+
+	// Reinitialize on View Transitions
+	document.addEventListener("astro:after-swap", () =>
+		setTimeout(initParticles, 100),
+	)
+
+	// Update particles when theme changes
+	const observer = new MutationObserver(() => {
+		const container = document.getElementById("particles-js")
+		if (container && container.children.length > 0) {
+			container.innerHTML = ""
+			setTimeout(initParticles, 50)
+		}
+	})
+	observer.observe(document.documentElement, {
+		attributes: true,
+		attributeFilter: ["class"],
+	})
 </script>
 
 <style>
-  .line-clamp-1 {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+	.line-clamp-1 {
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	/* Gradient text for the name */
+	.text-gradient {
+		background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	:global(.dark) .text-gradient {
+		background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	/* Animations */
+	.animate-fade-in {
+		animation: fadeIn 0.6s ease-out forwards;
+	}
+
+	.animate-fade-in-up {
+		animation: fadeInUp 0.6s ease-out forwards;
+		animation-delay: 0.2s;
+		opacity: 0;
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* Respect reduced motion */
+	@media (prefers-reduced-motion: reduce) {
+		.animate-fade-in,
+		.animate-fade-in-up {
+			animation: none;
+			opacity: 1;
+			transform: none;
+		}
+	}
 </style>

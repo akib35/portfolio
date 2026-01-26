@@ -9,17 +9,46 @@ import { projects } from '../data/projects';
   <section class="py-16">
     <div class="container">
       <div class="text-center mb-12">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4">My Projects</h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">My Projects</h1>
+        <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
           A collection of projects I've worked on. Each one represents a unique challenge and learning experience.
         </p>
       </div>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.map((project) => (
-          <ProjectCard {...project} />
+        {projects.map((project, index) => (
+          <div class="animate-on-scroll" style={`animation-delay: ${index * 100}ms`}>
+            <ProjectCard {...project} />
+          </div>
         ))}
       </div>
     </div>
   </section>
 </Layout>
+
+<script>
+  function initScrollAnimations() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+      observer.observe(el);
+    });
+  }
+
+  initScrollAnimations();
+  document.addEventListener('astro:after-swap', initScrollAnimations);
+</script>

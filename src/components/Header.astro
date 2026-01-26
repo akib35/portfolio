@@ -1,39 +1,98 @@
 ---
 import Navigation from './Navigation.astro';
+import MobileMenu from './MobileMenu.astro';
 import { siteConfig } from '../config';
 import { Image } from 'astro:assets';
 ---
 
-<header class="bg-white shadow-sm sticky top-0 z-50">
+<header class="bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/20 sticky top-0 z-50 transition-colors">
   <div class="container py-4">
     <div class="flex justify-between items-center">
       <!-- Left: Profile Picture + Name -->
-      <a href="/" class="flex items-center gap-3 text-xl font-bold text-gray-900 hover:text-blue-600 no-underline">
-        <Image 
-          src="/my-pic.png" 
+      <a href="/" class="flex items-center gap-3 text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 no-underline transition-colors">
+        <Image
+          src="/my-pic.png"
           alt={siteConfig.name}
-          width={40} 
-          height={40} 
+          width={40}
+          height={40}
           loading="eager"
-          class="w-10 h-10 rounded-full object-cover border-2 border-blue-600"
+          class="w-10 h-10 rounded-full object-cover border-2 border-blue-600 dark:border-blue-400"
         />
         <span class="hidden sm:inline">{siteConfig.name}</span>
       </a>
-      
-      <!-- Center/Right: Navigation + CV Button -->
-      <div class="flex items-center gap-6">
+
+      <!-- Center/Right: Navigation + Search + Theme Toggle + CV Button + Mobile Menu -->
+      <div class="flex items-center gap-4">
         <Navigation />
-        <a 
-          href="/my-cv.pdf" 
+
+        <!-- Search Button (Cmd+K) -->
+        <button
+          id="search-trigger"
+          type="button"
+          class="hidden md:flex items-center gap-2 px-3 py-1.5 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
+          aria-label="Search (Ctrl+K)"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <span class="hidden lg:inline">Search</span>
+          <kbd class="hidden lg:inline px-1.5 py-0.5 text-xs bg-white dark:bg-gray-600 rounded shadow-sm">⌘K</kbd>
+        </button>
+
+        <!-- Theme Toggle Button -->
+        <button
+          id="theme-toggle"
+          type="button"
+          class="relative inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition-all duration-200"
+          aria-label="Toggle dark mode"
+        >
+          <!-- Sun icon (shown in dark mode) -->
+          <svg class="w-5 h-5 text-gray-600 dark:text-yellow-300 transition-all duration-300 absolute opacity-0 dark:opacity-100 scale-50 dark:scale-100 rotate-90 dark:rotate-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+          </svg>
+          <!-- Moon icon (shown in light mode) -->
+          <svg class="w-5 h-5 text-gray-700 dark:text-gray-300 transition-all duration-300 absolute opacity-100 dark:opacity-0 scale-100 dark:scale-50 rotate-0 dark:rotate-90" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+          </svg>
+        </button>
+
+        <a
+          href="/my-cv.pdf"
           download
-          class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+          class="hidden sm:inline-flex items-center gap-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
           </svg>
           <span>Résumé</span>
         </a>
+
+        <MobileMenu />
       </div>
     </div>
   </div>
 </header>
+
+<script is:inline>
+  // Theme toggle functionality
+  function initThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (!themeToggle) return;
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      if (isDark) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+  }
+
+  initThemeToggle();
+  document.addEventListener('astro:after-swap', initThemeToggle);
+</script>

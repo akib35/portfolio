@@ -1,0 +1,291 @@
+---
+import { projects } from '../data/projects';
+import { getCollection } from 'astro:content';
+
+const blogPosts = await getCollection('blog');
+
+// Create search index
+const searchIndex = [
+  // Pages
+  { title: 'Home', url: '/', type: 'page', keywords: ['home', 'portfolio', 'welcome'] },
+  { title: 'About', url: '/about', type: 'page', keywords: ['about', 'bio', 'skills', 'experience'] },
+  { title: 'Projects', url: '/projects', type: 'page', keywords: ['projects', 'work', 'portfolio'] },
+  { title: 'Blog', url: '/blog', type: 'page', keywords: ['blog', 'posts', 'articles'] },
+  { title: 'Contact', url: '/contact', type: 'page', keywords: ['contact', 'email', 'message', 'hire'] },
+  // Projects
+  ...projects.map(p => ({
+    title: p.title,
+    url: '/projects',
+    type: 'project',
+    keywords: [p.title.toLowerCase(), p.description.toLowerCase(), ...p.techStack.map(t => t.toLowerCase())].join(' ')
+  })),
+  // Blog posts
+  ...blogPosts.map(p => ({
+    title: p.data.title,
+    url: `/blog/${p.slug}`,
+    type: 'blog',
+    keywords: [p.data.title.toLowerCase(), p.data.excerpt?.toLowerCase() || ''].join(' ')
+  }))
+];
+---
+
+<!-- Search Modal -->
+<div
+  id="search-modal"
+  class="fixed inset-0 z-[100] hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="search-title"
+>
+  <!-- Backdrop -->
+  <div class="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm" id="search-backdrop"></div>
+
+  <!-- Modal -->
+  <div class="fixed inset-0 flex items-start justify-center pt-[15vh] px-4">
+    <div class="w-full max-w-xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-blue-900/20 overflow-hidden">
+      <!-- Search Header -->
+      <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input
+          type="text"
+          id="search-input"
+          class="flex-1 bg-transparent border-none outline-none text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-base"
+          placeholder="Search pages, projects, posts..."
+          autocomplete="off"
+          aria-label="Search"
+        />
+        <kbd class="hidden sm:inline-flex items-center gap-1 px-2 py-1 text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 rounded">
+          ESC
+        </kbd>
+      </div>
+
+      <!-- Search Results -->
+      <div id="search-results" class="max-h-[60vh] overflow-y-auto">
+        <div class="p-4 text-center text-gray-500 dark:text-gray-400 text-sm" id="search-empty">
+          Start typing to search...
+        </div>
+        <ul id="search-list" class="hidden divide-y divide-gray-100 dark:divide-gray-700"></ul>
+        <div class="hidden p-4 text-center text-gray-500 dark:text-gray-400 text-sm" id="search-no-results">
+          No results found.
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+        <div class="flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
+          <div class="flex items-center gap-4">
+            <span class="flex items-center gap-1">
+              <kbd class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded">↑</kbd>
+              <kbd class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded">↓</kbd>
+              navigate
+            </span>
+            <span class="flex items-center gap-1">
+              <kbd class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded">↵</kbd>
+              select
+            </span>
+          </div>
+          <span class="flex items-center gap-1">
+            <kbd class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded">esc</kbd>
+            close
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Search trigger (keyboard shortcut hint) -->
+<button
+  id="search-trigger"
+  type="button"
+  class="hidden md:flex items-center gap-2 px-3 py-1.5 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
+  aria-label="Search (Ctrl+K)"
+>
+  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+  </svg>
+  <span>Search</span>
+  <kbd class="px-1.5 py-0.5 text-xs bg-white dark:bg-gray-600 rounded shadow-sm">⌘K</kbd>
+</button>
+
+<!-- Search Data -->
+<script id="search-data" type="application/json" set:html={JSON.stringify(searchIndex)} />
+
+<script>
+  function initSearch() {
+    const modal = document.getElementById('search-modal');
+    const backdrop = document.getElementById('search-backdrop');
+    const input = document.getElementById('search-input') as HTMLInputElement;
+    const trigger = document.getElementById('search-trigger');
+    const resultsList = document.getElementById('search-list');
+    const emptyState = document.getElementById('search-empty');
+    const noResults = document.getElementById('search-no-results');
+    const dataScript = document.getElementById('search-data');
+
+    if (!modal || !input || !resultsList || !dataScript) return;
+
+    const searchIndex = JSON.parse(dataScript.textContent || '[]');
+    let selectedIndex = 0;
+    let results: typeof searchIndex = [];
+
+    function openModal() {
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      input.value = '';
+      input.focus();
+      showEmpty();
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+      input.value = '';
+    }
+
+    function showEmpty() {
+      emptyState?.classList.remove('hidden');
+      resultsList?.classList.add('hidden');
+      noResults?.classList.add('hidden');
+    }
+
+    function showNoResults() {
+      emptyState?.classList.add('hidden');
+      resultsList?.classList.add('hidden');
+      noResults?.classList.remove('hidden');
+    }
+
+    function showResults() {
+      emptyState?.classList.add('hidden');
+      resultsList?.classList.remove('hidden');
+      noResults?.classList.add('hidden');
+    }
+
+    function getTypeIcon(type: string) {
+      switch (type) {
+        case 'page':
+          return '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>';
+        case 'project':
+          return '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>';
+        case 'blog':
+          return '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>';
+        default:
+          return '';
+      }
+    }
+
+    function search(query: string) {
+      if (!query.trim()) {
+        showEmpty();
+        return;
+      }
+
+      const q = query.toLowerCase();
+      results = searchIndex.filter((item: any) =>
+        item.title.toLowerCase().includes(q) ||
+        item.keywords.toLowerCase?.().includes(q) ||
+        (Array.isArray(item.keywords) && item.keywords.some((k: string) => k.includes(q)))
+      );
+
+      if (results.length === 0) {
+        showNoResults();
+        return;
+      }
+
+      selectedIndex = 0;
+      renderResults();
+      showResults();
+    }
+
+    function renderResults() {
+      if (!resultsList) return;
+
+      resultsList.innerHTML = results.map((item: any, index: number) => `
+        <li>
+          <a
+            href="${item.url}"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${index === selectedIndex ? 'bg-blue-50 dark:bg-blue-900/30' : ''}"
+            data-index="${index}"
+          >
+            <span class="flex-shrink-0 text-gray-400 dark:text-gray-500">
+              ${getTypeIcon(item.type)}
+            </span>
+            <span class="flex-1">
+              <span class="block text-gray-900 dark:text-white font-medium">${item.title}</span>
+              <span class="block text-xs text-gray-500 dark:text-gray-400 capitalize">${item.type}</span>
+            </span>
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </li>
+      `).join('');
+    }
+
+    function updateSelection() {
+      const items = resultsList?.querySelectorAll('a');
+      items?.forEach((item, index) => {
+        if (index === selectedIndex) {
+          item.classList.add('bg-blue-50', 'dark:bg-blue-900/30');
+          item.scrollIntoView({ block: 'nearest' });
+        } else {
+          item.classList.remove('bg-blue-50', 'dark:bg-blue-900/30');
+        }
+      });
+    }
+
+    function navigateToSelected() {
+      if (results.length > 0) {
+        window.location.href = results[selectedIndex].url;
+      }
+    }
+
+    // Event listeners
+    trigger?.addEventListener('click', openModal);
+    backdrop?.addEventListener('click', closeModal);
+
+    input?.addEventListener('input', (e) => {
+      search((e.target as HTMLInputElement).value);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      // Open modal with Cmd+K or Ctrl+K
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (modal.classList.contains('hidden')) {
+          openModal();
+        } else {
+          closeModal();
+        }
+      }
+
+      // Close with Escape
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModal();
+      }
+
+      // Navigate results
+      if (!modal.classList.contains('hidden') && results.length > 0) {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          selectedIndex = (selectedIndex + 1) % results.length;
+          updateSelection();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          selectedIndex = (selectedIndex - 1 + results.length) % results.length;
+          updateSelection();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          navigateToSelected();
+        }
+      }
+    });
+
+    // Close on navigation
+    document.addEventListener('astro:before-preparation', closeModal);
+  }
+
+  initSearch();
+  document.addEventListener('astro:after-swap', initSearch);
+</script>
