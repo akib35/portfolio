@@ -8,8 +8,27 @@ const sortedPosts = blogPosts.sort((a, b) => b.data.date.getTime() - a.data.date
 
 <Layout title="Blog">
   <div class="container py-12 dark:bg-gray-900 min-h-screen">
-    <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">Blog</h1>
-    <p class="text-gray-600 dark:text-gray-400 mb-8">Thoughts on web development and technology</p>
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">Blog</h1>
+        <p class="text-gray-600 dark:text-gray-400">Thoughts on web development and technology</p>
+      </div>
+      <!-- Blog Search -->
+      <div class="relative w-full md:w-72">
+        <input
+          type="text"
+          id="blog-search"
+          placeholder="Search posts..."
+          class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-colors"
+        />
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- No results message (hidden by default) -->
+    <p id="no-results" class="hidden text-gray-500 dark:text-gray-400 text-center py-8">No posts found matching your search.</p>
 
     {sortedPosts.length === 0 ? (
       <p class="text-gray-500 dark:text-gray-400">No blog posts yet. Check back soon!</p>
@@ -35,3 +54,46 @@ const sortedPosts = blogPosts.sort((a, b) => b.data.date.getTime() - a.data.date
     )}
   </div>
 </Layout>
+
+<script>
+  function initBlogSearch() {
+    const searchInput = document.getElementById('blog-search') as HTMLInputElement;
+    const noResults = document.getElementById('no-results');
+    const articlesContainer = document.querySelector('.space-y-6');
+
+    if (!searchInput || !noResults || !articlesContainer) return;
+
+    const articles = articlesContainer.querySelectorAll('article');
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+
+      articles.forEach((article) => {
+        const title = article.querySelector('h2')?.textContent?.toLowerCase() || '';
+        const excerpt = article.querySelector('p:last-of-type')?.textContent?.toLowerCase() || '';
+        const matches = query === '' || title.includes(query) || excerpt.includes(query);
+
+        if (matches) {
+          article.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          article.classList.add('hidden');
+        }
+      });
+
+      // Show/hide no results message
+      if (visibleCount === 0 && query !== '') {
+        noResults.classList.remove('hidden');
+        articlesContainer.classList.add('hidden');
+      } else {
+        noResults.classList.add('hidden');
+        articlesContainer.classList.remove('hidden');
+      }
+    });
+  }
+
+  // Initialize on page load and after view transitions
+  initBlogSearch();
+  document.addEventListener('astro:after-swap', initBlogSearch);
+</script>
