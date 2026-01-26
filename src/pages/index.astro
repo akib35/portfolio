@@ -21,12 +21,12 @@ const gridClasses = featuredProjects.length === 1 ? 'grid-cols-1' :
 
 <Layout title={`${siteConfig.name} - Portfolio`}>
   <!-- Hero Section -->
-  <section class="py-24 bg-gradient-to-br from-gray-50 via-white to-gray-100">
+  <section class="py-24 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
     <div class="container text-center">
-      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-        Hi, I'm <span id="typewriter" class="text-blue-600" data-name={name}></span>
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+        Hi, I'm <span id="typewriter" class="text-blue-600 dark:text-blue-400" data-name={name}></span>
       </h1>
-      <p class="text-xl text-gray-600 max-w-xl mx-auto mb-10 leading-relaxed">
+      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-xl mx-auto mb-10 leading-relaxed">
         CSE graduate from CUET. Full-stack developer passionate about building web apps, mobile apps, and solving algorithmic challenges.
       </p>
       <div class="flex justify-center gap-4">
@@ -41,11 +41,11 @@ const gridClasses = featuredProjects.length === 1 ? 'grid-cols-1' :
   </section>
 
   <!-- Featured Projects Section -->
-  <section class="py-20">
+  <section class="py-20 dark:bg-gray-900">
     <div class="container">
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-gray-900 mb-3">Featured Projects</h2>
-        <p class="text-gray-600">Some things I've built recently</p>
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-3">Featured Projects</h2>
+        <p class="text-gray-600 dark:text-gray-400">Some things I've built recently</p>
       </div>
       <div class={`grid gap-6 justify-center ${gridClasses}`}>
         {featuredProjects.map((project) => (
@@ -53,7 +53,7 @@ const gridClasses = featuredProjects.length === 1 ? 'grid-cols-1' :
         ))}
       </div>
       <div class="text-center mt-10">
-        <a href="/projects" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1">
+        <a href="/projects" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center gap-1">
           View all projects <span aria-hidden="true">→</span>
         </a>
       </div>
@@ -61,26 +61,26 @@ const gridClasses = featuredProjects.length === 1 ? 'grid-cols-1' :
   </section>
 
   <!-- Blog Section -->
-  <section class="py-20 bg-gray-50">
+  <section class="py-20 bg-gray-50 dark:bg-gray-800">
     <div class="container">
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-gray-900 mb-3">Latest Posts</h2>
-        <p class="text-gray-600">Thoughts on development and things I'm learning</p>
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-3">Latest Posts</h2>
+        <p class="text-gray-600 dark:text-gray-400">Thoughts on development and things I'm learning</p>
       </div>
       <div class="max-w-2xl mx-auto space-y-4">
         {recentPosts.map((post) => (
-          <a 
-            href={`/blog/${post.slug}`} 
-            class="block p-5 bg-white rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all no-underline group"
+          <a
+            href={`/blog/${post.slug}`}
+            class="block p-5 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-md dark:hover:shadow-gray-900/50 transition-all no-underline group"
           >
             <div class="flex justify-between items-start gap-4">
               <div>
-                <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
+                <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1">
                   {post.data.title}
                 </h3>
-                <p class="text-gray-600 text-sm line-clamp-1">{post.data.excerpt}</p>
+                <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-1">{post.data.excerpt}</p>
               </div>
-              <time class="text-sm text-gray-400 whitespace-nowrap">
+              <time class="text-sm text-gray-400 dark:text-gray-500 whitespace-nowrap">
                 {new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
               </time>
             </div>
@@ -88,7 +88,7 @@ const gridClasses = featuredProjects.length === 1 ? 'grid-cols-1' :
         ))}
       </div>
       <div class="text-center mt-8">
-        <a href="/blog" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1">
+        <a href="/blog" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center gap-1">
           Read all posts <span aria-hidden="true">→</span>
         </a>
       </div>
@@ -96,11 +96,11 @@ const gridClasses = featuredProjects.length === 1 ? 'grid-cols-1' :
   </section>
 
   <!-- Simple CTA Section -->
-  <section class="py-20">
+  <section class="py-20 dark:bg-gray-900">
     <div class="container">
       <div class="max-w-2xl mx-auto text-center">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">Let's Work Together</h2>
-        <p class="text-gray-600 mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Let's Work Together</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-8">
           I'm currently available for freelance work and interesting collaborations.
         </p>
         <a href="/contact" class="btn btn-primary">

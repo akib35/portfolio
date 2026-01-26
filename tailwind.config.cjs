@@ -1,13 +1,14 @@
 module.exports = {
   content: ['./src/**/*.{astro,html,js,jsx,ts,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        primary: '#1D4ED8', // Example primary color
-        secondary: '#9333EA', // Example secondary color
-        accent: '#FBBF24', // Example accent color
-        background: '#F9FAFB', // Example background color
-        text: '#111827', // Example text color
+        primary: '#1D4ED8',
+        secondary: '#9333EA',
+        accent: '#FBBF24',
+        background: '#F9FAFB',
+        text: '#111827',
       },
     },
   },
