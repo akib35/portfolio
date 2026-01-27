@@ -3,8 +3,28 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { siteConfig } from '../../config';
 
+// Calculate reading time from content
+function calculateReadingTime(content: string): string {
+  const wordsPerMinute = 200;
+  const wordCount = content.split(/\s+/).length;
+  const minutes = Math.ceil(wordCount / wordsPerMinute);
+  return `${minutes} min read`;
+}
+
 const blogPosts = await getCollection('blog');
-const sortedPosts = blogPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Render content and calculate reading time for each post
+const postsWithReadingTime = await Promise.all(
+  blogPosts.map(async (post) => {
+    const { remarkPluginFrontmatter } = await post.render();
+    return {
+      ...post,
+      readingTime: calculateReadingTime(post.body || ''),
+    };
+  })
+);
+
+const sortedPosts = postsWithReadingTime.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 // Get the latest post for featured section
 const featuredPost = sortedPosts[0];
@@ -77,6 +97,8 @@ const otherPosts = sortedPosts.slice(1);
                     <time class="text-sm text-gray-500 dark:text-gray-400">
                       {featuredPost.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                     </time>
+                    <span class="text-gray-300 dark:text-gray-600">•</span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">{featuredPost.readingTime}</span>
                   </div>
                   
                   <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-3">
@@ -108,6 +130,8 @@ const otherPosts = sortedPosts.slice(1);
                       <time class="text-sm text-gray-500 dark:text-gray-400">
                         {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                       </time>
+                      <span class="text-gray-300 dark:text-gray-600">•</span>
+                      <span class="text-sm text-gray-500 dark:text-gray-400">{post.readingTime}</span>
                     </div>
                     
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
