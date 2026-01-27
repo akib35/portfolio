@@ -1,6 +1,7 @@
 ---
 import Navigation from './Navigation.astro';
 import ThemeToggle from './ThemeToggle.astro';
+import CursorToggle from './CursorToggle.astro';
 import { siteConfig } from '../config';
 import { Image } from 'astro:assets';
 ---
@@ -30,6 +31,7 @@ import { Image } from 'astro:assets';
       <div class="flex items-center gap-2 sm:gap-4">
         <Navigation />
         <div class="flex items-center gap-2">
+          <CursorToggle />
           <ThemeToggle />
           <a
             href="/my-cv.pdf"
