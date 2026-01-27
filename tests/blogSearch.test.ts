@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { filterBlogPosts, matchesBlogPost, type BlogPost } from './blogSearch';
+import { filterBlogPosts, matchesBlogPost, type BlogPost } from '../src/utils/blogSearch';
 
 const mockPosts: BlogPost[] = [
   {

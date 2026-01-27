@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { projects } from '../src/data/projects';
+import { projects } from '../src/utils/projects';
 
 describe('projects data', () => {
   it('should export an array of projects', () => {
@@ -13,6 +13,7 @@ describe('projects data', () => {
       expect(project).toHaveProperty('techStack');
       expect(project).toHaveProperty('githubLink');
       expect(project).toHaveProperty('featured');
+      expect(project).toHaveProperty('ongoing');
     });
   });
 
@@ -20,5 +21,17 @@ describe('projects data', () => {
     projects.forEach((project) => {
       expect(Array.isArray(project.techStack)).toBe(true);
     });
+  });
+
+  it('featured and ongoing should be booleans', () => {
+    projects.forEach((project) => {
+      expect(typeof project.featured).toBe('boolean');
+      expect(typeof project.ongoing).toBe('boolean');
+    });
+  });
+
+  it('should have at least one featured project', () => {
+    const featuredProjects = projects.filter(p => p.featured);
+    expect(featuredProjects.length).toBeGreaterThan(0);
   });
 });

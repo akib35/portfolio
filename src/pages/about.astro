@@ -1,110 +1,160 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { siteConfig } from '../config';
+import { about } from '../utils/about';
 
-const programmingLanguages = ["Python", "C++", "C", "Go", "JavaScript", "Java"];
-const frameworks = ["Django", "React", "Bootstrap", "Flutter"];
-const tools = ["Git", "REST API", "SQL", "Docker", "Linux", "PostgreSQL"];
-const softwareDesign = ["SOLID", "Design Patterns"];
-const interests = ["Parallel Computing", "Cloud Computing", "Computer Security"];
+const { intro, bio, education, skills, programmingProfiles, values } = about;
+
+// Skill color mappings
+const colorClasses: Record<string, { bg: string; text: string }> = {
+  blue: { bg: 'bg-blue-50 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-300' },
+  green: { bg: 'bg-green-50 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-300' },
+  purple: { bg: 'bg-purple-50 dark:bg-purple-900/30', text: 'text-purple-700 dark:text-purple-300' },
+  orange: { bg: 'bg-orange-50 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-300' },
+  gray: { bg: 'bg-gray-100 dark:bg-gray-700', text: 'text-gray-700 dark:text-gray-300' },
+};
 ---
 
 <Layout title={`About - ${siteConfig.name}`}>
-  <section class="py-20 dark:bg-gray-900">
+  <!-- Hero Section -->
+  <section class="py-16 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
     <div class="container">
-      <div class="max-w-2xl mx-auto">
-        <!-- Intro -->
-        <div class="mb-12">
-          <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-6">About Me</h1>
-          <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-            I'm <strong class="text-gray-900 dark:text-white">{siteConfig.name}</strong>, a Computer Science graduate from
-            Chittagong University of Engineering and Technology (CUET) based in {siteConfig.location}.
-          </p>
-          <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-            I'm passionate about building full-stack web applications, mobile apps, and solving complex problems.
-            I have experience with Django, React, Flutter, and various backend technologies including PostgreSQL and Docker.
-          </p>
-          <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-            I've solved <strong class="text-gray-900 dark:text-white">200+ problems</strong> on platforms like LeetCode, Codeforces,
-            HackerRank, and AtCoder, which has strengthened my algorithmic thinking and problem-solving abilities.
-          </p>
-          <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-            My interests include Parallel Computing, Cloud Computing, and Computer Security. I'm always eager to
-            learn new technologies and take on challenging projects.
-          </p>
+      <div class="max-w-3xl mx-auto text-center">
+        <p class="text-blue-600 dark:text-blue-400 font-medium mb-2">{intro.greeting}</p>
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">{siteConfig.name}</h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-2">{intro.title}</p>
+        <p class="text-gray-500 dark:text-gray-400">{intro.tagline}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 dark:bg-gray-900">
+    <div class="container">
+      <div class="max-w-3xl mx-auto">
+        
+        <!-- About Me -->
+        <div class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+            <span class="w-8 h-1 bg-blue-600 rounded"></span>
+            About Me
+          </h2>
+          <div class="space-y-4">
+            {bio.map((paragraph) => (
+              <p class="text-gray-600 dark:text-gray-300 leading-relaxed">{paragraph}</p>
+            ))}
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+            <span class="w-8 h-1 bg-blue-600 rounded"></span>
+            Education
+          </h2>
+          <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-3">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{education.degree}</h3>
+              <span class="text-blue-600 dark:text-blue-400 font-medium">{education.year}</span>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 mb-3">{education.institution}</p>
+            <ul class="space-y-1">
+              {education.achievements.map((achievement) => (
+                <li class="text-gray-500 dark:text-gray-400 text-sm flex items-center gap-2">
+                  <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  {achievement}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <!-- Skills -->
-        <div class="mb-12">
-          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Skills</h2>
-
+        <div class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+            <span class="w-8 h-1 bg-blue-600 rounded"></span>
+            Skills & Technologies
+          </h2>
           <div class="space-y-6">
-            <div>
-              <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Programming Languages</h3>
-              <div class="flex flex-wrap gap-2">
-                {programmingLanguages.map((skill) => (
-                  <span class="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm rounded-lg">
-                    {skill}
-                  </span>
-                ))}
+            {Object.values(skills).map((category) => (
+              <div>
+                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+                  {category.label}
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                  {category.items.map((item) => (
+                    <span class={`px-3 py-1.5 ${colorClasses[category.color].bg} ${colorClasses[category.color].text} text-sm rounded-lg`}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            ))}
+          </div>
+        </div>
 
-            <div>
-              <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Frameworks & Libraries</h3>
-              <div class="flex flex-wrap gap-2">
-                {frameworks.map((skill) => (
-                  <span class="px-3 py-1.5 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-sm rounded-lg">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
+        <!-- Programming Profiles -->
+        <div class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+            <span class="w-8 h-1 bg-blue-600 rounded"></span>
+            Competitive Programming
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {programmingProfiles.map((profile) => (
+              <a 
+                href={profile.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-md transition-all no-underline"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {profile.platform}
+                  </h3>
+                  <svg class="w-4 h-4 text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                  </svg>
+                </div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">@{profile.username}</p>
+                <p class="text-sm text-blue-600 dark:text-blue-400 font-medium mt-1">{profile.stats}</p>
+              </a>
+            ))}
+          </div>
+        </div>
 
-            <div>
-              <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Tools & Technologies</h3>
-              <div class="flex flex-wrap gap-2">
-                {tools.map((skill) => (
-                  <span class="px-3 py-1.5 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-sm rounded-lg">
-                    {skill}
-                  </span>
-                ))}
+        <!-- Values -->
+        <div class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+            <span class="w-8 h-1 bg-blue-600 rounded"></span>
+            What I Value
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {values.map((value) => (
+              <div class="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{value.title}</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">{value.description}</p>
               </div>
-            </div>
-
-            <div>
-              <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Software Design</h3>
-              <div class="flex flex-wrap gap-2">
-                {softwareDesign.map((skill) => (
-                  <span class="px-3 py-1.5 bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 text-sm rounded-lg">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Interests</h3>
-              <div class="flex flex-wrap gap-2">
-                {interests.map((interest) => (
-                  <span class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-lg">
-                    {interest}
-                  </span>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
         <!-- CTA -->
-        <div class="pt-8 border-t border-gray-200 dark:border-gray-700">
-          <p class="text-gray-600 dark:text-gray-400 mb-4">
-            Interested in working together? I'd love to hear from you.
+        <div class="pt-8 border-t border-gray-200 dark:border-gray-700 text-center">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Let's Connect</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">
+            Interested in working together or just want to say hello? I'd love to hear from you.
           </p>
-          <a href="/contact" class="btn btn-primary">
-            Get in Touch
-          </a>
+          <div class="flex justify-center gap-4">
+            <a href="/contact" class="btn btn-primary">
+              Get in Touch
+            </a>
+            <a href="/projects" class="btn btn-secondary">
+              View Projects
+            </a>
+          </div>
         </div>
+
       </div>
     </div>
   </section>

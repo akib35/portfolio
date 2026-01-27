@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { siteConfig } from '../config';
-import { projects } from '../data/projects';
+import { projects } from '../utils/projects';
 import { getCollection } from 'astro:content';
 
 const name = siteConfig.name;
@@ -67,29 +67,62 @@ const gridClasses = featuredProjects.length === 1 ? 'grid-cols-1' :
         <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-3">Latest Posts</h2>
         <p class="text-gray-600 dark:text-gray-400">Thoughts on development and things I'm learning</p>
       </div>
-      <div class="max-w-2xl mx-auto space-y-4">
-        {recentPosts.map((post) => (
-          <a
-            href={`/blog/${post.slug}`}
-            class="block p-5 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-md dark:hover:shadow-gray-900/50 transition-all no-underline group"
-          >
-            <div class="flex justify-between items-start gap-4">
-              <div>
-                <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1">
-                  {post.data.title}
-                </h3>
-                <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-1">{post.data.excerpt}</p>
-              </div>
-              <time class="text-sm text-gray-400 dark:text-gray-500 whitespace-nowrap">
-                {new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-              </time>
-            </div>
-          </a>
-        ))}
+      
+      <div class="max-w-4xl mx-auto">
+        {recentPosts.length > 0 && (
+          <div class="grid gap-6">
+            {recentPosts.map((post, index) => (
+              <a
+                href={`/blog/${post.slug}`}
+                class="group block no-underline"
+              >
+                <article class={`relative bg-white dark:bg-gray-700 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 ${index === 0 ? 'p-6 md:p-8' : 'p-5'}`}>
+                  {index === 0 && (
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+                  )}
+                  
+                  <div class="flex flex-col md:flex-row md:items-center gap-4">
+                    <div class="flex-1">
+                      <div class="flex items-center gap-3 mb-2">
+                        {index === 0 && (
+                          <span class="px-2 py-0.5 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full">
+                            New
+                          </span>
+                        )}
+                        <time class="text-sm text-gray-500 dark:text-gray-400">
+                          {new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </time>
+                      </div>
+                      
+                      <h3 class={`font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2 ${index === 0 ? 'text-xl md:text-2xl' : 'text-lg'}`}>
+                        {post.data.title}
+                      </h3>
+                      
+                      <p class={`text-gray-600 dark:text-gray-400 ${index === 0 ? '' : 'line-clamp-1'}`}>
+                        {post.data.excerpt}
+                      </p>
+                    </div>
+                    
+                    <div class="flex items-center text-blue-600 dark:text-blue-400 font-medium shrink-0">
+                      <span class="hidden md:inline mr-2">Read</span>
+                      <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                      </svg>
+                    </div>
+                  </div>
+                </article>
+              </a>
+            ))}
+          </div>
+        )}
       </div>
-      <div class="text-center mt-8">
-        <a href="/blog" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center gap-1">
-          Read all posts <span aria-hidden="true">→</span>
+      
+      <div class="text-center mt-10">
+        <a href="/blog" class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-medium rounded-xl border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-md transition-all">
+          View all posts
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
         </a>
       </div>
     </div>
@@ -99,9 +132,9 @@ const gridClasses = featuredProjects.length === 1 ? 'grid-cols-1' :
   <section class="py-20 dark:bg-gray-900">
     <div class="container">
       <div class="max-w-2xl mx-auto text-center">
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Let's Work Together</h2>
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Let's Communicate</h2>
         <p class="text-gray-600 dark:text-gray-400 mb-8">
-          I'm currently available for freelance work and interesting collaborations.
+          I'm available for freelance and interesting collaborations.
         </p>
         <a href="/contact" class="btn btn-primary">
           Get in Touch
@@ -113,7 +146,7 @@ const gridClasses = featuredProjects.length === 1 ? 'grid-cols-1' :
 
 <!-- Client-side script (runs in browser) -->
 <script>
-  import { initTypewriter } from '../scripts/typewriter';
+  import { initTypewriter } from '../utils/typewriter';
   initTypewriter();
 </script>
 
