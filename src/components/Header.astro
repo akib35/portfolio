@@ -5,36 +5,43 @@ import { siteConfig } from '../config';
 import { Image } from 'astro:assets';
 ---
 
-<header class="bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/20 sticky top-0 z-50 transition-colors duration-200">
+<header class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-50 transition-all duration-300">
   <div class="container py-4">
     <div class="flex justify-between items-center">
       <!-- Left: Profile Picture + Name -->
-      <a href="/" class="flex items-center gap-3 text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 no-underline transition-colors">
-        <Image
-          src="/my-pic.png"
-          alt={siteConfig.name}
-          width={40}
-          height={40}
-          loading="eager"
-          class="w-10 h-10 rounded-full object-cover border-2 border-blue-600 dark:border-blue-400"
-        />
-        <span class="hidden sm:inline">{siteConfig.name}</span>
+      <a href="/" class="group flex items-center gap-3 no-underline">
+        <div class="relative">
+          <Image
+            src="/my-pic.png"
+            alt={siteConfig.name}
+            width={44}
+            height={44}
+            loading="eager"
+            class="w-11 h-11 rounded-full object-cover ring-2 ring-blue-500/20 group-hover:ring-blue-500/50 transition-all duration-300"
+          />
+          <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+        </div>
+        <span class="hidden sm:inline text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+          {siteConfig.name}
+        </span>
       </a>
 
       <!-- Center/Right: Navigation + Theme Toggle + CV Button -->
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 sm:gap-4">
         <Navigation />
-        <ThemeToggle />
-        <a
-          href="/my-cv.pdf"
-          download
-          class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white text-sm font-semibold rounded-lg transition-colors"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-          <span>Résumé</span>
-        </a>
+        <div class="flex items-center gap-2">
+          <ThemeToggle />
+          <a
+            href="/my-cv.pdf"
+            download
+            class="btn btn-primary text-sm py-2.5"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            <span class="hidden sm:inline">Résumé</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
