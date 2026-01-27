@@ -1,6 +1,7 @@
 [
   {
     "featured": true,
+    "ongoing": false,
     "title": "University Management System",
     "description": "A database management system for universities to store and manage data for students, courses, and enrollments. Features RESTful API endpoints for CRUD operations.",
     "techStack": ["Django", "PostgreSQL", "Docker", "Python"],
@@ -8,6 +9,7 @@
   },
   {
     "featured": true,
+    "ongoing": false,
     "title": "Black Board",
     "description": "A real-time multi-user collaborative drawing web application with simultaneous drawing on a shared canvas with instant synchronization across clients.",
     "techStack": ["Go", "Gorilla WebSocket", "JavaScript", "HTML5", "CSS"],
@@ -15,6 +17,7 @@
   },
   {
     "featured": true,
+    "ongoing": false,
     "title": "E-Code Verifier",
     "description": "A cross-platform mobile application for extracting ingredients information of packaged food using E-Code. Features two-step authentication, E-Code scanning and verification.",
     "techStack": ["Flutter", "Firebase", "REST API"],
@@ -22,9 +25,19 @@
   },
   {
     "featured": false,
+    "ongoing": false,
     "title": "SmartHaat",
     "description": "A web application for buying and selling of livestock, targeting farmers and traders. Features product listings, search/filtering, shopping cart, order management, and admin panel.",
     "techStack": ["Django", "Vue.js", "REST API"],
     "githubLink": "https://github.com/akib35/smarthaat"
+  },
+  {
+    "featured": false,
+    "ongoing": true,
+    "title": "Portfolio Website",
+    "description": "A modern, responsive portfolio website built with Astro and Tailwind CSS. Features blog system, contact form with CAPTCHA, and CI/CD pipeline.",
+    "techStack": ["Astro", "TypeScript", "Tailwind CSS", "Vitest"],
+    "liveLink": "https://akib35.me",
+    "githubLink": "https://github.com/akib35/portfolio"
   }
 ]

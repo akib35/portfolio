@@ -1,5 +1,6 @@
 interface Project {
   featured: boolean;
+  ongoing: boolean;
   title: string;
   description: string;
   techStack: string[];

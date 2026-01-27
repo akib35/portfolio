@@ -1,6 +1,9 @@
+/**
+ * Typewriter animation effect for the hero section
+ */
 import { siteConfig } from '../config';
 
-export function initTypewriter() {
+export function initTypewriter(): void {
   const typewriterElement = document.getElementById('typewriter') as HTMLElement | null;
   if (!typewriterElement) return;
 
@@ -10,26 +13,26 @@ export function initTypewriter() {
   function typeWriter(text: string): Promise<void> {
     return new Promise((resolve) => {
       let index = 0;
-      typewriterElement!.textContent = '';  // Clear text for each new item
+      typewriterElement!.textContent = '';
       function type() {
         if (index < text.length) {
           typewriterElement!.textContent += text.charAt(index);
           index++;
-          setTimeout(type, 100);  // Delay per letter
+          setTimeout(type, 100);
         } else {
-          resolve();  // Done typing this item
+          resolve();
         }
       }
       type();
     });
   }
 
-  async function startTyping() {
-    while (true) {  // Loop infinitely for a cycling effect
+  async function startTyping(): Promise<void> {
+    while (true) {
       const item = data[currentIndex];
       await typeWriter(item);
-      await new Promise(resolve => setTimeout(resolve, 2000));  // Pause before next item (2 seconds)
-      currentIndex = (currentIndex + 1) % data.length;  // Cycle to next item
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      currentIndex = (currentIndex + 1) % data.length;
     }
   }
 

@@ -1,0 +1,93 @@
+{
+  "intro": {
+    "greeting": "Hello! I'm",
+    "title": "Full Stack Developer",
+    "tagline": "Building digital experiences that make a difference"
+  },
+  "bio": [
+    "I'm a Computer Science graduate from Chittagong University of Engineering and Technology (CUET), currently based in Dhaka, Bangladesh. My journey in tech started with a curiosity about how things work, which evolved into a passion for building solutions that solve real-world problems.",
+    "I specialize in full-stack web development and mobile app development, with hands-on experience in Django, React, Flutter, and various backend technologies including PostgreSQL and Docker. I enjoy the entire process of bringing ideas to life—from initial concept and architecture to deployment and optimization.",
+    "Beyond development, I'm an avid competitive programmer with 200+ problems solved across platforms like LeetCode, Codeforces, HackerRank, and AtCoder. This practice has sharpened my algorithmic thinking and ability to write efficient, optimized code.",
+    "When I'm not coding, you'll find me exploring new technologies, reading about system design, or contributing to open-source projects. I believe in continuous learning and staying curious about emerging trends in software development."
+  ],
+  "education": {
+    "degree": "B.Sc. in Computer Science & Engineering",
+    "institution": "Chittagong University of Engineering and Technology (CUET)",
+    "year": "2024",
+    "achievements": [
+      "Specialized in Software Engineering",
+      "Active member of CUET Computer Club"
+    ]
+  },
+  "skills": {
+    "programmingLanguages": {
+      "label": "Programming Languages",
+      "items": ["Python", "C++", "C", "Go", "JavaScript", "TypeScript", "Java"],
+      "color": "blue"
+    },
+    "frameworks": {
+      "label": "Frameworks & Libraries",
+      "items": ["Django", "React", "Astro", "Bootstrap", "Flutter", "Tailwind CSS"],
+      "color": "green"
+    },
+    "tools": {
+      "label": "Tools & Technologies",
+      "items": ["Git", "REST API", "GraphQL", "SQL", "Docker", "Linux", "PostgreSQL", "Firebase"],
+      "color": "purple"
+    },
+    "softwareDesign": {
+      "label": "Software Design",
+      "items": ["SOLID Principles", "Design Patterns", "Clean Architecture", "TDD"],
+      "color": "orange"
+    },
+    "interests": {
+      "label": "Areas of Interest",
+      "items": ["Parallel Computing", "Cloud Computing", "Computer Security", "System Design"],
+      "color": "gray"
+    }
+  },
+  "programmingProfiles": [
+    {
+      "platform": "LeetCode",
+      "username": "akib35",
+      "link": "https://leetcode.com/akib35",
+      "icon": "leetcode",
+      "stats": "200+ problems"
+    },
+    {
+      "platform": "Codeforces",
+      "username": "akib35",
+      "link": "https://codeforces.com/profile/akib35",
+      "icon": "codeforces",
+      "stats": "Pupil"
+    },
+    {
+      "platform": "HackerRank",
+      "username": "akib35",
+      "link": "https://www.hackerrank.com/akib35",
+      "icon": "hackerrank",
+      "stats": "3★ Problem Solving"
+    },
+    {
+      "platform": "AtCoder",
+      "username": "akib35",
+      "link": "https://atcoder.jp/users/akib35",
+      "icon": "atcoder",
+      "stats": "Active"
+    }
+  ],
+  "values": [
+    {
+      "title": "Clean Code",
+      "description": "Writing readable, maintainable, and well-documented code that others can easily understand and build upon."
+    },
+    {
+      "title": "Continuous Learning",
+      "description": "Staying curious and keeping up with the latest technologies, best practices, and industry trends."
+    },
+    {
+      "title": "Problem Solving",
+      "description": "Approaching challenges methodically and finding efficient solutions through analytical thinking."
+    }
+  ]
+}

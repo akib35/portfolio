@@ -1,37 +1,219 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { siteConfig } from '../../config';
+
+// Calculate reading time from content
+function calculateReadingTime(content: string): string {
+  const wordsPerMinute = 200;
+  const wordCount = content.split(/\s+/).length;
+  const minutes = Math.ceil(wordCount / wordsPerMinute);
+  return `${minutes} min read`;
+}
 
 const blogPosts = await getCollection('blog');
-const sortedPosts = blogPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Render content and calculate reading time for each post
+const postsWithReadingTime = await Promise.all(
+  blogPosts.map(async (post) => {
+    const { remarkPluginFrontmatter } = await post.render();
+    return {
+      ...post,
+      readingTime: calculateReadingTime(post.body || ''),
+    };
+  })
+);
+
+const sortedPosts = postsWithReadingTime.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Get the latest post for featured section
+const featuredPost = sortedPosts[0];
+const otherPosts = sortedPosts.slice(1);
 ---
 
-<Layout title="Blog">
-  <div class="container py-12">
-    <h1 class="text-4xl font-bold text-gray-900 mb-2">Blog</h1>
-    <p class="text-gray-600 mb-8">Thoughts on web development and technology</p>
-    
-    {sortedPosts.length === 0 ? (
-      <p class="text-gray-500">No blog posts yet. Check back soon!</p>
-    ) : (
-      <div class="space-y-6">
-        {sortedPosts.map(post => (
-          <article class="border-b pb-6 last:border-b-0">
-            <a href={`/blog/${post.slug}`} class="group no-underline">
-              <h2 class="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
-                {post.data.title}
-              </h2>
-            </a>
-            <p class="text-gray-600 text-sm mb-3">
-              {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </p>
-            <p class="text-gray-700">{post.data.excerpt}</p>
-            <a href={`/blog/${post.slug}`} class="inline-block mt-3 text-blue-600 hover:text-blue-700 font-medium">
-              Read More →
-            </a>
-          </article>
-        ))}
+<Layout title={`Blog - ${siteConfig.name}`}>
+  <!-- Hero Section -->
+  <section class="py-16 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div class="container">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Blog</h1>
+        <p class="text-lg text-gray-600 dark:text-gray-400">
+          Thoughts, tutorials, and insights on web development, programming, and technology.
+        </p>
       </div>
-    )}
-  </div>
+    </div>
+  </section>
+
+  <section class="py-12 dark:bg-gray-900">
+    <div class="container">
+      <!-- Search Bar -->
+      <div class="mb-12">
+        <div class="relative max-w-md">
+          <input
+            type="text"
+            id="blog-search"
+            placeholder="Search articles..."
+            class="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent outline-none transition-all shadow-sm"
+          />
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- No results message (hidden by default) -->
+      <div id="no-results" class="hidden text-center py-16">
+        <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <p class="text-gray-500 dark:text-gray-400 text-lg">No posts found matching your search.</p>
+        <button id="clear-search" class="mt-4 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
+          Clear search
+        </button>
+      </div>
+
+      {sortedPosts.length === 0 ? (
+        <div class="text-center py-16">
+          <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+          </svg>
+          <p class="text-gray-500 dark:text-gray-400 text-lg">No blog posts yet. Check back soon!</p>
+        </div>
+      ) : (
+        <div id="posts-container">
+          <!-- Featured Post -->
+          {featuredPost && (
+            <a href={`/blog/${featuredPost.slug}`} class="group block mb-12 blog-post" data-title={featuredPost.data.title.toLowerCase()} data-excerpt={featuredPost.data.excerpt?.toLowerCase() || ''}>
+              <article class="relative bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-8 border border-blue-100 dark:border-blue-800 hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 hover:shadow-xl overflow-hidden">
+                <!-- Decorative elements -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full -translate-y-32 translate-x-32"></div>
+                <div class="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-purple-400/10 to-blue-400/10 rounded-full translate-y-24 -translate-x-24"></div>
+                
+                <div class="relative">
+                  <div class="flex items-center gap-3 mb-4">
+                    <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full">
+                      Latest Post
+                    </span>
+                    <time class="text-sm text-gray-500 dark:text-gray-400">
+                      {featuredPost.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </time>
+                    <span class="text-gray-300 dark:text-gray-600">•</span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">{featuredPost.readingTime}</span>
+                  </div>
+                  
+                  <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-3">
+                    {featuredPost.data.title}
+                  </h2>
+                  
+                  <p class="text-gray-600 dark:text-gray-400 text-lg mb-4 max-w-2xl">
+                    {featuredPost.data.excerpt}
+                  </p>
+                  
+                  <span class="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-semibold group-hover:gap-3 transition-all">
+                    Read article
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                  </span>
+                </div>
+              </article>
+            </a>
+          )}
+
+          <!-- Other Posts Grid -->
+          {otherPosts.length > 0 && (
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {otherPosts.map((post) => (
+                <a href={`/blog/${post.slug}`} class="group block blog-post" data-title={post.data.title.toLowerCase()} data-excerpt={post.data.excerpt?.toLowerCase() || ''}>
+                  <article class="h-full bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                    <div class="flex items-center gap-2 mb-3">
+                      <time class="text-sm text-gray-500 dark:text-gray-400">
+                        {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                      </time>
+                      <span class="text-gray-300 dark:text-gray-600">•</span>
+                      <span class="text-sm text-gray-500 dark:text-gray-400">{post.readingTime}</span>
+                    </div>
+                    
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
+                      {post.data.title}
+                    </h2>
+                    
+                    <p class="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+                      {post.data.excerpt}
+                    </p>
+                    
+                    <span class="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 font-medium text-sm group-hover:gap-2 transition-all">
+                      Read more
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                      </svg>
+                    </span>
+                  </article>
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  function initBlogSearch() {
+    const searchInput = document.getElementById('blog-search') as HTMLInputElement;
+    const noResults = document.getElementById('no-results');
+    const postsContainer = document.getElementById('posts-container');
+    const clearSearch = document.getElementById('clear-search');
+
+    if (!searchInput || !noResults || !postsContainer) return;
+
+    const posts = postsContainer.querySelectorAll('.blog-post');
+
+    function performSearch() {
+      const query = searchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+
+      posts.forEach((post) => {
+        const title = post.getAttribute('data-title') || '';
+        const excerpt = post.getAttribute('data-excerpt') || '';
+        const matches = query === '' || title.includes(query) || excerpt.includes(query);
+
+        if (matches) {
+          (post as HTMLElement).classList.remove('hidden');
+          visibleCount++;
+        } else {
+          (post as HTMLElement).classList.add('hidden');
+        }
+      });
+
+      if (visibleCount === 0 && query !== '') {
+        noResults?.classList.remove('hidden');
+        postsContainer?.classList.add('hidden');
+      } else {
+        noResults?.classList.add('hidden');
+        postsContainer?.classList.remove('hidden');
+      }
+    }
+
+    searchInput.addEventListener('input', performSearch);
+
+    clearSearch?.addEventListener('click', () => {
+      searchInput.value = '';
+      performSearch();
+      searchInput.focus();
+    });
+  }
+
+  initBlogSearch();
+  document.addEventListener('astro:after-swap', initBlogSearch);
+</script>

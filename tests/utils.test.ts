@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatDate, toggleClass } from '../src/js/utils.js';
+import { formatDate, toggleClass } from '../src/utils/helpers';
 
 describe('utils', () => {
   describe('formatDate', () => {

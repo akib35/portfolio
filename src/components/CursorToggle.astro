@@ -1,0 +1,198 @@
+---
+// Cursor Toggle Component - cycles through banana, rocket, water cursors
+---
+
+<button
+  id="cursor-toggle"
+  type="button"
+  class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:scale-105"
+  aria-label="Toggle cursor style"
+  title="Change cursor"
+>
+  <span id="cursor-icon" class="text-lg">🍌</span>
+</button>
+
+<script>
+  function initCursorToggle() {
+    const cursors = ['banana', 'rocket', 'water'];
+    const icons: Record<string, string> = {
+      banana: '🍌',
+      rocket: '🚀',
+      water: '💧'
+    };
+    
+    let currentIndex = 0;
+    let rocketTrailInterval: number | null = null;
+    
+    // Get saved cursor or default to banana
+    const savedCursor = localStorage.getItem('cursor-style') || 'banana';
+    currentIndex = cursors.indexOf(savedCursor);
+    if (currentIndex === -1) currentIndex = 0;
+    
+    const toggle = document.getElementById('cursor-toggle');
+    const iconSpan = document.getElementById('cursor-icon');
+    
+    function applyCursor(cursorType: string) {
+      // Remove all cursor classes
+      cursors.forEach(c => document.documentElement.classList.remove(`cursor-${c}`));
+      // Add new cursor class
+      document.documentElement.classList.add(`cursor-${cursorType}`);
+      // Update icon
+      if (iconSpan) iconSpan.textContent = icons[cursorType];
+      // Save preference
+      localStorage.setItem('cursor-style', cursorType);
+      
+      // Handle rocket trail
+      if (cursorType === 'rocket') {
+        startRocketTrail();
+      } else {
+        stopRocketTrail();
+      }
+    }
+    
+    function startRocketTrail() {
+      if (rocketTrailInterval) return;
+      
+      let lastX = 0;
+      let lastY = 0;
+      
+      const handleMouseMove = (e: MouseEvent) => {
+        const dx = e.clientX - lastX;
+        const dy = e.clientY - lastY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance > 15) {
+          createTrailParticle(lastX, lastY);
+          lastX = e.clientX;
+          lastY = e.clientY;
+        }
+      };
+      
+      document.addEventListener('mousemove', handleMouseMove);
+      (window as any).rocketTrailHandler = handleMouseMove;
+    }
+    
+    function stopRocketTrail() {
+      if ((window as any).rocketTrailHandler) {
+        document.removeEventListener('mousemove', (window as any).rocketTrailHandler);
+        (window as any).rocketTrailHandler = null;
+      }
+    }
+    
+    function createTrailParticle(x: number, y: number) {
+      const particle = document.createElement('div');
+      particle.className = 'rocket-trail';
+      particle.style.left = x + 'px';
+      particle.style.top = y + 'px';
+      document.body.appendChild(particle);
+      
+      setTimeout(() => particle.remove(), 500);
+    }
+    
+    // Apply saved cursor on load
+    applyCursor(cursors[currentIndex]);
+    
+    // Toggle on click
+    toggle?.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % cursors.length;
+      applyCursor(cursors[currentIndex]);
+    });
+  }
+  
+  // Click animation handler
+  function initClickAnimations() {
+    document.addEventListener('click', (e) => {
+      const cursorType = localStorage.getItem('cursor-style') || 'banana';
+      
+      if (cursorType === 'banana') {
+        createBananaRipple(e.clientX, e.clientY);
+      } else if (cursorType === 'rocket') {
+        createRocketSmoke(e.clientX, e.clientY);
+      } else if (cursorType === 'water') {
+        createWaterSplash(e.clientX, e.clientY);
+      }
+    });
+  }
+  
+  function createBananaRipple(x: number, y: number) {
+    const ripple = document.createElement('div');
+    ripple.className = 'click-ripple-banana';
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  }
+  
+  function createRocketSmoke(x: number, y: number) {
+    const container = document.createElement('div');
+    container.className = 'click-smoke-rocket';
+    container.style.left = x + 'px';
+    container.style.top = y + 'px';
+    
+    // Create multiple smoke particles
+    for (let i = 0; i < 5; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'smoke-particle';
+      const offsetX = (Math.random() - 0.5) * 30;
+      const offsetY = (Math.random() - 0.5) * 20;
+      particle.style.left = offsetX + 'px';
+      particle.style.top = offsetY + 'px';
+      particle.style.animationDelay = (i * 0.1) + 's';
+      container.appendChild(particle);
+    }
+    
+    document.body.appendChild(container);
+    setTimeout(() => container.remove(), 1000);
+  }
+  
+  function createWaterSplash(x: number, y: number) {
+    const container = document.createElement('div');
+    container.className = 'click-splash-water';
+    container.style.left = x + 'px';
+    container.style.top = y + 'px';
+    
+    // Create ripple rings
+    for (let i = 0; i < 3; i++) {
+      const ring = document.createElement('div');
+      ring.className = 'water-ring';
+      container.appendChild(ring);
+    }
+    
+    // Create splash droplets
+    for (let i = 0; i < 6; i++) {
+      const droplet = document.createElement('div');
+      droplet.className = 'water-droplet';
+      const angle = (i / 6) * Math.PI * 2;
+      const distance = 20 + Math.random() * 20;
+      const endX = Math.cos(angle) * distance;
+      const endY = Math.sin(angle) * distance;
+      droplet.style.setProperty('--end-x', endX + 'px');
+      droplet.style.setProperty('--end-y', endY + 'px');
+      droplet.style.animation = `droplet-splash-${i} 0.6s ease-out forwards`;
+      
+      // Add inline keyframes for each droplet
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes droplet-splash-${i} {
+          0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+          100% { transform: translate(calc(-50% + ${endX}px), calc(-50% + ${endY}px)) scale(0.5); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
+      setTimeout(() => style.remove(), 1000);
+      
+      container.appendChild(droplet);
+    }
+    
+    document.body.appendChild(container);
+    setTimeout(() => container.remove(), 800);
+  }
+  
+  initCursorToggle();
+  initClickAnimations();
+  
+  // Re-initialize on page navigation (Astro)
+  document.addEventListener('astro:after-swap', () => {
+    initCursorToggle();
+  });
+</script>

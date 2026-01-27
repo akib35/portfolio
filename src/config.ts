@@ -18,6 +18,10 @@ export const siteConfig = {
       name: "mdakibhasan18",
       link: "https://twitter.com/mdakibhasan18"
     },
+    facebook: {
+      name: "mdakibhasan18",
+      link: "https://facebook.com/akib4040"
+    },
   },
 
   site: {
