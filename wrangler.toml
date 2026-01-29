@@ -1,0 +1,14 @@
+name = "portfolio"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "dist"
+
+# Environment variables for email notifications
+[vars]
+CONTACT_EMAIL = "contact@akib35.me"
+SITE_URL = "https://akib35.me"
+
+# D1 Database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "portfolio-forms"
+database_id = "1e180c4a-9eab-4bbd-b4e9-aaa625e7d5fd"

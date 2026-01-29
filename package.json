@@ -5,10 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
+    "dev:wrangler": "wrangler pages dev dist --compatibility-date=2024-01-01 --d1=DB",
     "build": "astro build",
     "preview": "astro preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "db:create": "wrangler d1 create portfolio-forms",
+    "db:migrate": "wrangler d1 execute portfolio-forms --file=./migrations/0001_create_submissions_table.sql",
+    "db:migrate:local": "wrangler d1 execute portfolio-forms --local --file=./migrations/0001_create_submissions_table.sql"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
@@ -18,9 +22,11 @@
     "tailwindcss": "^3.4.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250127.0",
     "autoprefixer": "^10.4.0",
     "postcss": "^8.4.0",
-    "vitest": "^4.0.17"
+    "vitest": "^4.0.17",
+    "wrangler": "^3.105.0"
   },
   "pnpm": {
     "overrides": {
