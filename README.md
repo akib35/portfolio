@@ -165,7 +165,7 @@ pnpm test:watch
 **Md Akib Hasan**
 
 - 🌐 Website: [akib35.me](https://akib35.me)
-- 📧 Email: [writetoakibhasan@gmail.com](mailto:writetoakibhasan@gmail.com)
+- 📧 Email: [contact@akib35.me](mailto:contact@akib35.me)
 - 💼 LinkedIn: [akibH](https://linkedin.com/in/akibH)
 - 🐙 GitHub: [akib35](https://github.com/akib35)
 - 🐦 Twitter: [mdakibhasan18](https://twitter.com/mdakibhasan18)
