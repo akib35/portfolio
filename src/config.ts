@@ -1,7 +1,7 @@
 export const siteConfig = {
   
   name: "Akib Hasan",
-  email: "writetoakibhasan@gmail.com",
+  email: "contact@akib35.me",
   phone: "+1 234 567 8900",
   location: "Dhaka, Bangladesh",
 
