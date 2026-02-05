@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { siteConfig } from '../config';
 
+const formspreeId = import.meta.env.PUBLIC_FORMSPREE_ID;
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 
@@ -25,7 +26,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 
         <!-- Contact Form Card -->
         <div class="bg-white dark:bg-gray-800/50 rounded-3xl p-8 md:p-10 shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-700/50 mb-12">
-          <form id="contact-form" class="space-y-6">
+          <form id="contact-form" class="space-y-6" data-formspree-id={formspreeId}>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -138,10 +139,10 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   window.onTurnstileSuccess = function(token) {
     const submitBtn = document.getElementById('submit-btn');
     const verifyMessage = document.getElementById('verify-message');
-    
+
     if (submitBtn && verifyMessage) {
       submitBtn.disabled = false;
-      verifyMessage.textContent = '✓ Verified! You can now send your message';
+      verifyMessage.textContent = '\u2713 Verified! You can now send your message';
       verifyMessage.classList.remove('text-gray-500', 'dark:text-gray-400');
       verifyMessage.classList.add('text-green-600', 'dark:text-green-400');
     }
@@ -152,119 +153,135 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
     const form = document.getElementById('contact-form');
     const submitBtn = document.getElementById('submit-btn');
     const verifyMessage = document.getElementById('verify-message');
-    
-    if (form) {
-      form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        if (submitBtn.disabled) {
-          showNotification('Please complete the verification before submitting.', 'error');
-          return false;
-        }
 
-        // Disable submit button and show loading state
-        submitBtn.disabled = true;
-        const originalContent = submitBtn.innerHTML;
-        submitBtn.innerHTML = `
-          <svg class="animate-spin w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          Sending...
-        `;
+    if (!form || !submitBtn) return;
 
-        try {
-          // Get form data
-          const formData = new FormData(form);
-          const data = {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            subject: formData.get('subject'),
-            message: formData.get('message'),
-          };
+    const formspreeId = form.getAttribute('data-formspree-id');
 
-          // Send to API
-          const response = await fetch('/api/submit', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-          });
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
 
-          const result = await response.json();
+      if (submitBtn.disabled) {
+        showNotification('Please complete the verification before submitting.', 'error');
+        return false;
+      }
 
-          if (result.success) {
-            showNotification(result.message || 'Thank you! Your message has been sent successfully.', 'success');
-            form.reset();
-            
-            // Reset Turnstile and button state
-            if (window.turnstile) {
-              window.turnstile.reset();
-            }
-            submitBtn.disabled = true;
-            if (verifyMessage) {
-              verifyMessage.textContent = 'Please verify you\'re human before sending';
-              verifyMessage.classList.remove('text-green-600', 'dark:text-green-400');
-              verifyMessage.classList.add('text-gray-500', 'dark:text-gray-400');
-            }
-          } else {
-            showNotification(result.error || 'Failed to send message. Please try again.', 'error');
-          }
-        } catch (error) {
-          console.error('Form submission error:', error);
-          showNotification('An error occurred. Please try again or email me directly.', 'error');
-        } finally {
-          // Restore button
-          submitBtn.innerHTML = originalContent;
-          submitBtn.disabled = false;
-        }
+      // Disable submit button and show loading state
+      submitBtn.disabled = true;
+      const originalContent = submitBtn.innerHTML;
+      submitBtn.innerHTML = '\
+        <svg class="animate-spin w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">\
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>\
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>\
+        </svg>\
+        Sending...\
+      ';
+
+      // Gather form data
+      var formData = new FormData(form);
+      var data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        subject: formData.get('subject'),
+        message: formData.get('message'),
+      };
+
+      // Fire-and-forget: D1 backend (secondary, non-blocking)
+      fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      }).catch(function(err) {
+        console.warn('D1 backend submission failed (non-critical):', err);
       });
-    }
+
+      // Primary: Formspree submission
+      try {
+        var formspreeUrl = 'https://formspree.io/f/' + formspreeId;
+        var response = await fetch(formspreeUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+          showNotification('Thank you! Your message has been sent successfully.', 'success');
+          form.reset();
+
+          // Reset Turnstile and button state
+          if (window.turnstile) {
+            window.turnstile.reset();
+          }
+          submitBtn.disabled = true;
+          if (verifyMessage) {
+            verifyMessage.textContent = 'Please verify you\'re human before sending';
+            verifyMessage.classList.remove('text-green-600', 'dark:text-green-400');
+            verifyMessage.classList.add('text-gray-500', 'dark:text-gray-400');
+          }
+        } else {
+          var result = {};
+          try { result = await response.json(); } catch(_) {}
+          var errorMsg = (result.errors && result.errors.map(function(e) { return e.message; }).join(', '))
+            || 'Failed to send message. Please try again.';
+          showNotification(errorMsg, 'error');
+        }
+      } catch (error) {
+        console.error('Form submission error:', error);
+        showNotification('An error occurred. Please try again or email me directly.', 'error');
+      } finally {
+        // Restore button
+        submitBtn.innerHTML = originalContent;
+        submitBtn.disabled = false;
+      }
+    });
   });
 
   // Notification helper
-  function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    const isError = type === 'error';
-    const isSuccess = type === 'success';
-    
-    notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-xl shadow-2xl border backdrop-blur-sm transform transition-all duration-300 ease-out ${
-      isError 
-        ? 'bg-red-50/95 dark:bg-red-900/95 border-red-200 dark:border-red-700 text-red-900 dark:text-red-100' 
-        : isSuccess 
+  function showNotification(message, type) {
+    type = type || 'info';
+    var notification = document.createElement('div');
+    var isError = type === 'error';
+    var isSuccess = type === 'success';
+
+    notification.className = 'fixed top-4 right-4 z-50 px-6 py-4 rounded-xl shadow-2xl border backdrop-blur-sm transform transition-all duration-300 ease-out ' +
+      (isError
+        ? 'bg-red-50/95 dark:bg-red-900/95 border-red-200 dark:border-red-700 text-red-900 dark:text-red-100'
+        : isSuccess
         ? 'bg-green-50/95 dark:bg-green-900/95 border-green-200 dark:border-green-700 text-green-900 dark:text-green-100'
         : 'bg-blue-50/95 dark:bg-blue-900/95 border-blue-200 dark:border-blue-700 text-blue-900 dark:text-blue-100'
-    }`;
-    
-    notification.innerHTML = `
-      <div class="flex items-start gap-3">
-        <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          ${isError 
+      );
+
+    notification.innerHTML = '\
+      <div class="flex items-start gap-3">\
+        <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
+          (isError
             ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>'
             : isSuccess
             ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>'
             : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>'
-          }
-        </svg>
-        <div class="flex-1 font-medium">${message}</div>
-        <button onclick="this.parentElement.parentElement.remove()" class="flex-shrink-0 hover:opacity-70 transition-opacity">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
-    `;
-    
+          ) +
+        '</svg>\
+        <div class="flex-1 font-medium">' + message + '</div>\
+        <button onclick="this.parentElement.parentElement.remove()" class="flex-shrink-0 hover:opacity-70 transition-opacity">\
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">\
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>\
+          </svg>\
+        </button>\
+      </div>\
+    ';
+
     document.body.appendChild(notification);
-    
+
     // Animate in
-    setTimeout(() => notification.classList.add('translate-x-0'), 10);
-    
+    setTimeout(function() { notification.classList.add('translate-x-0'); }, 10);
+
     // Auto remove after 5 seconds
-    setTimeout(() => {
+    setTimeout(function() {
       notification.classList.add('opacity-0', 'translate-x-full');
-      setTimeout(() => notification.remove(), 300);
+      setTimeout(function() { notification.remove(); }, 300);
     }, 5000);
   }
 </script>
