@@ -11,7 +11,7 @@ import myPic from '../assets/my-pic.png';
   <div class="container py-4">
     <div class="flex justify-between items-center">
       <!-- Left: Profile Picture + Name -->
-      <a href="/" class="group flex items-center gap-3 no-underline">
+      <a href="/" class="group flex items-center gap-3 no-underline" aria-label={siteConfig.name}>
         <div class="relative">
           <Image
             src={myPic}
@@ -38,6 +38,7 @@ import myPic from '../assets/my-pic.png';
           <a
             href="/my-cv.pdf"
             download
+            aria-label="Download Résumé"
             class="btn btn-primary text-sm py-2.5"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
