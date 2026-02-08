@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import { siteConfig } from '../config';
 import { about } from '../utils/about';
+import { Image } from 'astro:assets';
+import myPic from '../assets/my-pic.png';
 
 const { intro, bio, education, skills, programmingProfiles, values } = about;
 
@@ -41,9 +43,12 @@ const iconColors: Record<string, string> = {
             <div class="relative">
               <div class="w-56 h-56 md:w-72 md:h-72 rounded-full p-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
                 <div class="w-full h-full rounded-full bg-white dark:bg-gray-900 p-1">
-                  <img 
-                    src="/my-pic.png" 
+                  <Image
+                    src={myPic}
                     alt={siteConfig.name}
+                    width={288}
+                    height={288}
+                    format="webp"
                     class="w-full h-full rounded-full object-cover"
                   />
                 </div>

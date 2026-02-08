@@ -3,6 +3,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import { siteConfig } from '../config';
+import myPic from '../assets/my-pic.png';
 
 interface Props {
   title: string;
@@ -13,7 +14,7 @@ interface Props {
 const { 
   title, 
   description = "Full Stack Developer specializing in web technologies. View my portfolio and projects.",
-  image = "/my-pic.png"
+  image = myPic.src
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
