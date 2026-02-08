@@ -27,6 +27,8 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
         <!-- Contact Form Card -->
         <div class="bg-white dark:bg-gray-800/50 rounded-3xl p-8 md:p-10 shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-700/50 mb-12">
           <form id="contact-form" class="space-y-6" data-formspree-id={formspreeId}>
+            <!-- Honeypot field - hidden from humans, bots fill it and get rejected -->
+            <input type="text" name="_gotcha" style="display:none !important" tabindex="-1" autocomplete="off" />
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -184,6 +186,8 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
         email: formData.get('email'),
         subject: formData.get('subject'),
         message: formData.get('message'),
+        _gotcha: formData.get('_gotcha'),
+        'cf-turnstile-response': formData.get('cf-turnstile-response'),
       };
 
       // Fire-and-forget: D1 backend (secondary, non-blocking)

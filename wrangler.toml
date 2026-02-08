@@ -6,6 +6,8 @@ pages_build_output_dir = "dist"
 [vars]
 CONTACT_EMAIL = "contact@akib35.me"
 SITE_URL = "https://akib35.me"
+PUBLIC_TURNSTILE_SITE_KEY=0x4AAAAAACMqP-_QKElZMAeg
+PUBLIC_FORMSPREE_ID=mnjjnbkl
 
 # D1 Database binding
 [[d1_databases]]
