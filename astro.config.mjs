@@ -1,12 +1,17 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
+import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
   site: 'https://akib35.me',
+  adapter: cloudflare({
+    platformProxy: {
+      enabled: true,
+    },
+  }),
   integrations: [
-    tailwind(),
     sitemap({
       changefreq: 'weekly',
       priority: 0.7,
@@ -14,8 +19,13 @@ export default defineConfig({
     }),
     mdx(),
   ],
-  build: {
-    outDir: 'dist',
+  vite: {
+    plugins: [tailwindcss()],
+    server: {
+      watch: {
+        ignored: ['**/.wrangler/**'],
+      },
+    },
   },
   image: {
     service: {

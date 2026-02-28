@@ -1,6 +1,94 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Tailwind v4: class-based dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Theme extensions */
+@theme {
+  --color-primary: #1D4ED8;
+  --color-secondary: #9333EA;
+  --color-accent: #FBBF24;
+  --color-background: #F9FAFB;
+  --color-text: #111827;
+}
+
+/* ===== Seasonal Themes ===== */
+/* Spring: March-May — fresh greens and pinks */
+html[data-season="spring"] {
+  --season-from: #ecfdf5;
+  --season-via: #fdf2f8;
+  --season-to: #ecfdf5;
+  --season-accent: #10b981;
+  --season-accent-light: #d1fae5;
+}
+html[data-season="spring"].dark {
+  --season-from: #022c22;
+  --season-via: #1a0a14;
+  --season-to: #022c22;
+  --season-accent: #34d399;
+  --season-accent-light: #065f46;
+}
+
+/* Summer: June-Aug — warm yellows and oranges */
+html[data-season="summer"] {
+  --season-from: #fffbeb;
+  --season-via: #fff7ed;
+  --season-to: #fefce8;
+  --season-accent: #f59e0b;
+  --season-accent-light: #fef3c7;
+}
+html[data-season="summer"].dark {
+  --season-from: #1c1a00;
+  --season-via: #1a1000;
+  --season-to: #1c1a00;
+  --season-accent: #fbbf24;
+  --season-accent-light: #78350f;
+}
+
+/* Autumn: Sept-Nov — warm oranges and reds */
+html[data-season="autumn"] {
+  --season-from: #fff7ed;
+  --season-via: #fef2f2;
+  --season-to: #fefce8;
+  --season-accent: #ea580c;
+  --season-accent-light: #fed7aa;
+}
+html[data-season="autumn"].dark {
+  --season-from: #1a0f00;
+  --season-via: #1a0505;
+  --season-to: #1a1400;
+  --season-accent: #fb923c;
+  --season-accent-light: #7c2d12;
+}
+
+/* Winter: Dec-Feb — cool blues and purples (default matches existing) */
+html[data-season="winter"] {
+  --season-from: #eff6ff;
+  --season-via: #f5f3ff;
+  --season-to: #eff6ff;
+  --season-accent: #3b82f6;
+  --season-accent-light: #dbeafe;
+}
+html[data-season="winter"].dark {
+  --season-from: #0a1628;
+  --season-via: #0f0a1e;
+  --season-to: #0a1628;
+  --season-accent: #60a5fa;
+  --season-accent-light: #1e3a5f;
+}
+
+/* Seasonal hero gradient overlay */
+.season-gradient {
+  background: linear-gradient(135deg, var(--season-from), var(--season-via), var(--season-to));
+}
+
+.season-accent {
+  color: var(--season-accent);
+}
+
+.season-accent-bg {
+  background-color: var(--season-accent-light);
+}
 
 @layer base {
   html {
@@ -35,7 +123,7 @@
   }
 
   .btn-primary {
-    @apply bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30;
+    @apply bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30;
   }
 
   .btn-secondary {
@@ -70,7 +158,7 @@
 
   /* Gradient text */
   .gradient-text {
-    @apply bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 bg-clip-text text-transparent;
+    @apply bg-linear-to-r from-blue-600 via-purple-600 to-pink-500 bg-clip-text text-transparent;
   }
 
   /* Glass effect */

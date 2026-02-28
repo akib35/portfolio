@@ -156,8 +156,15 @@ pnpm test:watch
 
 ## 🚀 Upcoming Features
 
-- **Limit send message option** - Rate limiting for contact form submissions
 - **Refined blog posts** - Enhanced blog styling and features
+  - Login system and upload blog posts through an admin dashboard instead of git repo markdown files
+  - Rich text editor for blog posts with image uploads
+  - Tagging and categorization for blog posts
+  - **Dark mode** - User-selectable light/dark themes
+  - Better indexing and search for blog posts
+  - Comment and reply system for blog posts using D1 database
+  - Access to stop commenting on a blog post after a certain time period
+  - 
 - **Background based on season** - Dynamic seasonal themes
 
 ## 👤 Author

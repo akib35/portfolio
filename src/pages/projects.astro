@@ -12,10 +12,10 @@ const otherProjects = completedProjects.filter(p => !p.featured);
 
 <Layout title={`Projects - ${siteConfig.name}`}>
   <!-- Hero Section -->
-  <section class="py-20 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative overflow-hidden">
+  <section class="py-20 bg-linear-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative overflow-hidden">
     <!-- Decorative Background Elements -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full -translate-y-48 translate-x-48 blur-3xl"></div>
-    <div class="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-purple-400/10 to-pink-400/10 rounded-full translate-y-40 -translate-x-40 blur-3xl"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-linear-to-br from-blue-400/10 to-purple-400/10 rounded-full -translate-y-48 translate-x-48 blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 w-80 h-80 bg-linear-to-tr from-purple-400/10 to-pink-400/10 rounded-full translate-y-40 -translate-x-40 blur-3xl"></div>
     
     <div class="container relative">
       <div class="max-w-4xl mx-auto text-center">
@@ -26,7 +26,7 @@ const otherProjects = completedProjects.filter(p => !p.featured);
           Portfolio
         </div>
         <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-          My <span class="bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Projects</span>
+          My <span class="bg-linear-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Projects</span>
         </h1>
         <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
           A collection of projects I've built. Each one represents a unique challenge and learning experience.
@@ -60,7 +60,7 @@ const otherProjects = completedProjects.filter(p => !p.featured);
       {ongoingProjects.length > 0 && (
         <div class="mb-20">
           <div class="flex items-center gap-4 mb-8">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/25">
+            <div class="w-12 h-12 rounded-2xl bg-linear-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/25">
               <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
@@ -77,7 +77,7 @@ const otherProjects = completedProjects.filter(p => !p.featured);
             {ongoingProjects.map((project) => (
               <div class="group bg-white dark:bg-gray-800/50 rounded-2xl p-8 border-2 border-green-200 dark:border-green-800/50 shadow-lg shadow-gray-200/50 dark:shadow-none hover:shadow-xl hover:border-green-300 dark:hover:border-green-700 transition-all relative overflow-hidden">
                 <!-- Decorative element -->
-                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-full -translate-y-16 translate-x-16"></div>
+                <div class="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-green-500/10 to-emerald-500/10 rounded-full -translate-y-16 translate-x-16"></div>
                 
                 <div class="relative">
                   <div class="flex items-start justify-between mb-4">
@@ -132,14 +132,14 @@ const otherProjects = completedProjects.filter(p => !p.featured);
       {featuredProjects.length > 0 && (
         <div class="mb-20">
           <div class="flex items-center gap-4 mb-8">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg shadow-blue-500/25">
+            <div class="w-12 h-12 rounded-2xl bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg shadow-blue-500/25">
               <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
               </svg>
             </div>
             <div class="flex items-center gap-3">
               <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Featured Projects</h2>
-              <span class="px-3 py-1.5 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-700 dark:text-blue-400 text-xs font-semibold rounded-full">
+              <span class="px-3 py-1.5 bg-linear-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-700 dark:text-blue-400 text-xs font-semibold rounded-full">
                 ⭐ Highlights
               </span>
             </div>
@@ -156,7 +156,7 @@ const otherProjects = completedProjects.filter(p => !p.featured);
       {otherProjects.length > 0 && (
         <div class="mb-20">
           <div class="flex items-center gap-4 mb-8">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center shadow-lg shadow-gray-500/25">
+            <div class="w-12 h-12 rounded-2xl bg-linear-to-br from-gray-500 to-gray-600 flex items-center justify-center shadow-lg shadow-gray-500/25">
               <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
               </svg>
@@ -174,10 +174,10 @@ const otherProjects = completedProjects.filter(p => !p.featured);
       <!-- CTA -->
       <div class="relative overflow-hidden text-center py-12 bg-white dark:bg-gray-800/50 rounded-3xl border border-gray-100 dark:border-gray-700/50 shadow-lg shadow-gray-200/50 dark:shadow-none">
         <!-- Decorative bubbles -->
-        <div class="absolute top-0 left-0 w-48 h-48 bg-gradient-to-br from-blue-500/5 to-purple-500/5 dark:from-blue-500/10 dark:to-purple-500/10 rounded-full -translate-x-24 -translate-y-24"></div>
-        <div class="absolute bottom-0 right-0 w-36 h-36 bg-gradient-to-tr from-purple-500/5 to-pink-500/5 dark:from-purple-500/10 dark:to-pink-500/10 rounded-full translate-x-16 translate-y-16"></div>
+        <div class="absolute top-0 left-0 w-48 h-48 bg-linear-to-br from-blue-500/5 to-purple-500/5 dark:from-blue-500/10 dark:to-purple-500/10 rounded-full -translate-x-24 -translate-y-24"></div>
+        <div class="absolute bottom-0 right-0 w-36 h-36 bg-linear-to-tr from-purple-500/5 to-pink-500/5 dark:from-purple-500/10 dark:to-pink-500/10 rounded-full translate-x-16 translate-y-16"></div>
         
-        <div class="relative w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-500/20 dark:to-purple-500/20 flex items-center justify-center">
+        <div class="relative w-14 h-14 mx-auto mb-4 rounded-2xl bg-linear-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-500/20 dark:to-purple-500/20 flex items-center justify-center">
           <svg class="w-7 h-7 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
           </svg>
