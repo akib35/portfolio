@@ -27,20 +27,21 @@ describe('typewriter utility', () => {
 
   it('should start typing when element exists', () => {
     initTypewriter();
-    // After calling initTypewriter, the element text should be cleared to start typing
-    expect(container!.textContent).toBe('');
+    // typeWriter() calls type() synchronously for the first character
+    // so the first char is already typed immediately
+    expect(container!.textContent).toBe('A');
   });
 
   it('should type characters one at a time', async () => {
     initTypewriter();
 
-    // After first timer tick (100ms), one character should appear
+    // First char 'A' typed synchronously, after 100ms tick the second char appears
     await vi.advanceTimersByTimeAsync(100);
-    expect(container!.textContent!.length).toBe(1);
+    expect(container!.textContent!.length).toBe(2);
 
     // After more ticks, more characters appear
     await vi.advanceTimersByTimeAsync(400);
-    expect(container!.textContent!.length).toBeGreaterThan(1);
+    expect(container!.textContent!.length).toBeGreaterThan(2);
   });
 
   it('should type the full first item from data array', async () => {

@@ -92,7 +92,7 @@ describe('Submit API — POST /api/submit', () => {
 
   it('should reject email longer than 100 characters', async () => {
     const ctx = createContext({
-      body: { name: 'John', email: 'a'.repeat(91) + '@test.com', message: 'Hello' },
+      body: { name: 'John', email: 'a'.repeat(92) + '@test.com', message: 'Hello' },
     });
     const res = await onRequestPost(ctx as any);
     expect(res.status).toBe(400);
