@@ -1,0 +1,215 @@
+---
+/**
+ * Admin Login Page — Two-Factor Authentication
+ * Step 1: Username + Password
+ * Step 2: 6-digit email verification code
+ */
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { siteConfig } from '../../config';
+---
+
+<Layout title={`Admin Login - ${siteConfig.name}`}>
+  <section class="min-h-[80vh] flex items-center justify-center py-16 bg-linear-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div class="w-full max-w-md px-4">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8">
+
+        <!-- ── Step 1: Credentials ─────────────────────────── -->
+        <div id="step-credentials">
+          <div class="text-center mb-8">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Admin Login</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-1 text-sm">Sign in to manage your site</p>
+          </div>
+
+          <div id="error-message" class="hidden mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm"></div>
+
+          <form id="login-form" class="space-y-5">
+            <div>
+              <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Username</label>
+              <input type="text" id="username" name="username" required autocomplete="username"
+                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                placeholder="Enter your username" />
+            </div>
+
+            <div>
+              <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Password</label>
+              <input type="password" id="password" name="password" required autocomplete="current-password"
+                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                placeholder="Enter your password" />
+            </div>
+
+            <button type="submit" id="login-btn" class="w-full btn btn-primary py-3 text-base">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+              </svg>
+              Sign In
+            </button>
+          </form>
+        </div>
+
+        <!-- ── Step 2: 2FA Code ────────────────────────────── -->
+        <div id="step-2fa" class="hidden">
+          <div class="text-center mb-8">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Verify Your Identity</h1>
+            <p id="2fa-message" class="text-gray-500 dark:text-gray-400 mt-1 text-sm">A verification code has been sent to your email</p>
+          </div>
+
+          <div id="verify-error" class="hidden mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm"></div>
+
+          <form id="verify-form" class="space-y-5">
+            <div>
+              <label for="code" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Verification Code</label>
+              <input type="text" id="code" name="code" required autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6"
+                class="w-full px-4 py-4 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all text-center text-2xl tracking-[0.4em] font-mono"
+                placeholder="000000" />
+            </div>
+
+            <button type="submit" id="verify-btn" class="w-full btn btn-primary py-3 text-base bg-emerald-600! hover:bg-emerald-700!">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+              Verify &amp; Sign In
+            </button>
+          </form>
+
+          <div class="mt-4 text-center">
+            <button id="back-to-login" class="text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              ← Back to login
+            </button>
+          </div>
+        </div>
+
+        <!-- Back to site (always visible) -->
+        <div class="mt-6 text-center">
+          <a href="/" class="text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors no-underline">
+            ← Back to website
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script is:inline>
+  // ── State ──────────────────────────────────────────────────────────
+  let pendingToken = null;
+
+  // ── Elements ───────────────────────────────────────────────────────
+  const stepCredentials = document.getElementById('step-credentials');
+  const step2FA        = document.getElementById('step-2fa');
+  const loginForm      = document.getElementById('login-form');
+  const verifyForm     = document.getElementById('verify-form');
+  const errorEl        = document.getElementById('error-message');
+  const verifyErrorEl  = document.getElementById('verify-error');
+
+  // ── Check if already logged in ────────────────────────────────────
+  const token = document.cookie.match(/admin_token=([^;]+)/)?.[1];
+  if (token) {
+    fetch('/api/auth/login', { headers: { 'Authorization': 'Bearer ' + token } })
+      .then(r => r.json())
+      .then(data => { if (data.success) window.location.href = '/admin/dashboard'; });
+  }
+
+  // ── Step 1: Submit credentials ────────────────────────────────────
+  loginForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorEl?.classList.add('hidden');
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const btn = document.getElementById('login-btn');
+
+    btn.disabled = true;
+    btn.textContent = 'Verifying...';
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+
+      if (data.success && data.requires_2fa) {
+        // Move to step 2
+        pendingToken = data.pending_token;
+        document.getElementById('2fa-message').textContent = data.message || 'A verification code has been sent to your email';
+        stepCredentials.classList.add('hidden');
+        step2FA.classList.remove('hidden');
+        document.getElementById('code')?.focus();
+      } else if (data.success) {
+        // Direct login (shouldn't happen with 2FA, but just in case)
+        window.location.href = '/admin/dashboard';
+      } else {
+        errorEl.textContent = data.error || 'Login failed';
+        errorEl?.classList.remove('hidden');
+      }
+    } catch (err) {
+      errorEl.textContent = 'Connection error. Please try again.';
+      errorEl?.classList.remove('hidden');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg> Sign In';
+    }
+  });
+
+  // ── Step 2: Verify 2FA code ───────────────────────────────────────
+  verifyForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    verifyErrorEl?.classList.add('hidden');
+
+    const code = document.getElementById('code').value.trim();
+    const btn = document.getElementById('verify-btn');
+
+    if (!/^\d{6}$/.test(code)) {
+      verifyErrorEl.textContent = 'Please enter the 6-digit code';
+      verifyErrorEl?.classList.remove('hidden');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Verifying...';
+
+    try {
+      const res = await fetch('/api/auth/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pending_token: pendingToken, code }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        window.location.href = '/admin/dashboard';
+      } else {
+        verifyErrorEl.textContent = data.error || 'Verification failed';
+        verifyErrorEl?.classList.remove('hidden');
+      }
+    } catch (err) {
+      verifyErrorEl.textContent = 'Connection error. Please try again.';
+      verifyErrorEl?.classList.remove('hidden');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg> Verify &amp; Sign In';
+    }
+  });
+
+  // ── Back to login ─────────────────────────────────────────────────
+  document.getElementById('back-to-login')?.addEventListener('click', () => {
+    step2FA.classList.add('hidden');
+    stepCredentials.classList.remove('hidden');
+    pendingToken = null;
+    document.getElementById('code').value = '';
+    verifyErrorEl?.classList.add('hidden');
+  });
+</script>

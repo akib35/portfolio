@@ -37,6 +37,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         } else {
           document.documentElement.classList.remove('dark');
         }
+
+        // Seasonal theme detection
+        var month = new Date().getMonth(); // 0-11
+        var season;
+        if (month >= 2 && month <= 4) season = 'spring';
+        else if (month >= 5 && month <= 7) season = 'summer';
+        else if (month >= 8 && month <= 10) season = 'autumn';
+        else season = 'winter';
+        document.documentElement.dataset.season = season;
       })();
     </script>
 
@@ -80,7 +89,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body class="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
     <Header />
-    <main class="flex-grow">
+    <main class="grow">
       <slot />
     </main>
     <Footer />

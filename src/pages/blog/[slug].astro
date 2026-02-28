@@ -1,22 +1,12 @@
 ---
+export const prerender = false;
+
 import Layout from '../../layouts/Layout.astro';
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import '../../styles/blog.css';
 import { siteConfig } from '../../config';
 
-export async function getStaticPaths() {
-  const blogPosts = await getCollection('blog');
-  return blogPosts.map(post => ({
-    params: { slug: post.slug },
-    props: { post }
-  }));
-}
-
-interface Props {
-  post: any;
-}
-
-const { post } = Astro.props;
+const { slug } = Astro.params;
 
 // Calculate reading time
 function calculateReadingTime(text: string): number {
@@ -25,54 +15,87 @@ function calculateReadingTime(text: string): number {
   return Math.ceil(words / wordsPerMinute);
 }
 
-const readingTime = calculateReadingTime(post.body);
-
 // Simple markdown to HTML converter
 function markdownToHtml(markdown: string): string {
   let html = markdown;
-  
-  // Headers
   html = html.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
   html = html.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
   html = html.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
-  
-  // Bold
   html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  
-  // Italic
   html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-  
-  // Code blocks
   html = html.replace(/```(.*?)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-  
-  // Inline code
   html = html.replace(/`(.*?)`/g, '<code>$1</code>');
-  
-  // Links
   html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
-  
-  // Paragraphs
   html = html.split('\n\n').map((para: string) => {
-    if (para.startsWith('<h') || para.startsWith('<pre') || para.startsWith('<ul') || para.startsWith('<ol')) {
-      return para;
-    }
+    if (para.startsWith('<h') || para.startsWith('<pre') || para.startsWith('<ul') || para.startsWith('<ol')) return para;
     return `<p>${para}</p>`;
   }).join('');
-  
-  // Lists
   html = html.replace(/^\* (.*?)$/gm, '<li>$1</li>');
   html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
   html = html.replace(/^\d+\. (.*?)$/gm, '<li>$1</li>');
-  
   return html;
 }
 
-const htmlContent = markdownToHtml(post.body);
+// Try D1 first, then fall back to content collection
+let post: any = null;
+let htmlContent = '';
+let readingTime = 0;
+let tags: string[] = [];
+let postId: number | null = null;
+let allowComments = false;
+let source: 'database' | 'markdown' = 'markdown';
+
+try {
+  const runtime = (Astro.locals as any).runtime;
+  const db = runtime?.env?.DB;
+  if (db) {
+    const result = await db.prepare(
+      `SELECT bp.*, GROUP_CONCAT(t.name) as tag_names
+       FROM blog_posts bp
+       LEFT JOIN blog_post_tags bpt ON bp.id = bpt.blog_post_id
+       LEFT JOIN tags t ON bpt.tag_id = t.id
+       WHERE bp.slug = ? AND bp.status = 'published'
+       GROUP BY bp.id`
+    ).bind(slug).first();
+    
+    if (result) {
+      post = {
+        title: result.title,
+        excerpt: result.excerpt,
+        date: new Date(result.published_at || result.created_at),
+      };
+      htmlContent = result.content_html || markdownToHtml(result.content || '');
+      readingTime = calculateReadingTime(result.content || '');
+      tags = result.tag_names ? result.tag_names.split(',') : [];
+      postId = result.id;
+      allowComments = result.allow_comments === 1;
+      source = 'database';
+    }
+  }
+} catch (e) {
+  // D1 not available
+}
+
+// Fallback to content collection
+if (!post) {
+  const blogPosts = await getCollection('blog');
+  const mdPost = blogPosts.find(p => p.slug === slug);
+  if (!mdPost) return Astro.redirect('/404');
+  
+  post = {
+    title: mdPost.data.title,
+    excerpt: mdPost.data.excerpt,
+    date: mdPost.data.date,
+  };
+  htmlContent = markdownToHtml(mdPost.body);
+  readingTime = calculateReadingTime(mdPost.body);
+  source = 'markdown';
+}
 ---
 
-<Layout title={`${post.data.title} - ${siteConfig.name}`}>
+<Layout title={`${post.title} - ${siteConfig.name}`}>
   <!-- Hero Section -->
-  <section class="py-12 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+  <section class="py-12 bg-linear-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
     <div class="container max-w-4xl">
       <a href="/blog" class="inline-flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-6 no-underline">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,13 +114,21 @@ const htmlContent = markdownToHtml(post.body);
       </div>
       
       <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
-        {post.data.title}
+        {post.title}
       </h1>
       
-      {post.data.excerpt && (
+      {post.excerpt && (
         <p class="text-xl text-gray-600 dark:text-gray-400 mb-6">
-          {post.data.excerpt}
+          {post.excerpt}
         </p>
+      )}
+
+      {tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-4">
+          {tags.map(tag => (
+            <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-sm rounded-full">{tag}</span>
+          ))}
+        </div>
       )}
       
       <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
@@ -106,7 +137,7 @@ const htmlContent = markdownToHtml(post.body);
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
           </svg>
           <time>
-            {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            {post.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
           </time>
         </div>
         <span class="text-gray-300 dark:text-gray-600">•</span>
@@ -143,7 +174,7 @@ const htmlContent = markdownToHtml(post.body);
           <div class="flex items-center gap-2">
             <span class="text-sm text-gray-500 dark:text-gray-400 mr-2">Share:</span>
             <a 
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(Astro.url.href)}`}
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(Astro.url.href)}`}
               target="_blank"
               rel="noopener noreferrer"
               class="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-900/30 flex items-center justify-center transition-colors no-underline"
@@ -180,4 +211,173 @@ const htmlContent = markdownToHtml(post.body);
       </footer>
     </div>
   </article>
+
+  <!-- Comments Section (only for D1 posts with comments enabled) -->
+  {source === 'database' && allowComments && postId && (
+    <section class="py-12 dark:bg-gray-900">
+      <div class="container max-w-4xl">
+        <div class="bg-white dark:bg-gray-800/50 rounded-2xl p-8 border border-gray-100 dark:border-gray-700/50">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Comments</h2>
+          
+          <!-- Comment Form -->
+          <div id="comment-form-section" class="mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Leave a Comment</h3>
+            <form id="comment-form" class="space-y-4">
+              <input type="hidden" id="post-id" value={postId} />
+              <input type="hidden" id="parent-id" value="" />
+              <div id="reply-indicator" class="hidden items-center gap-2 text-sm text-blue-600 dark:text-blue-400 mb-2">
+                <span>Replying to a comment</span>
+                <button type="button" id="cancel-reply" class="text-red-500 hover:text-red-600">&times; Cancel</button>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input type="text" id="comment-name" placeholder="Your name *" required
+                  class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" />
+                <input type="email" id="comment-email" placeholder="Email (optional)"
+                  class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+              <textarea id="comment-content" placeholder="Write your comment..." rows="4" required
+                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+              <div class="flex items-center justify-between">
+                <p class="text-xs text-gray-400">Your comment will appear after moderation.</p>
+                <button type="submit" id="submit-comment" class="btn btn-primary text-sm py-2 px-6">Post Comment</button>
+              </div>
+              <div id="comment-status" class="text-sm"></div>
+            </form>
+          </div>
+
+          <!-- Comments List -->
+          <div id="comments-list"></div>
+          <div id="no-comments-msg" class="hidden text-center py-8 text-gray-400 dark:text-gray-500">
+            <p>No comments yet. Be the first to share your thoughts!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
 </Layout>
+
+<script is:inline>
+  (function() {
+    const form = document.getElementById('comment-form');
+    const commentsList = document.getElementById('comments-list');
+    const postIdEl = document.getElementById('post-id');
+    if (!form || !commentsList || !postIdEl) return;
+
+    const postId = postIdEl.value;
+
+    async function loadComments() {
+      try {
+        const res = await fetch('/api/comments?post_id=' + postId);
+        const data = await res.json();
+        if (data.success && data.comments.length > 0) {
+          document.getElementById('no-comments-msg')?.classList.add('hidden');
+          commentsList.innerHTML = buildCommentTree(data.comments);
+        } else {
+          document.getElementById('no-comments-msg')?.classList.remove('hidden');
+          commentsList.innerHTML = '';
+        }
+      } catch {
+        commentsList.innerHTML = '';
+      }
+    }
+
+    function buildCommentTree(comments) {
+      var topLevel = [];
+      var childrenMap = {};
+      comments.forEach(function(c) {
+        if (c.parent_id) {
+          if (!childrenMap[c.parent_id]) childrenMap[c.parent_id] = [];
+          childrenMap[c.parent_id].push(c);
+        } else {
+          topLevel.push(c);
+        }
+      });
+      return topLevel.map(function(c) { return renderComment(c, childrenMap, 0); }).join('');
+    }
+
+    function renderComment(c, childrenMap, depth) {
+      var date = new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      var html = '<div class="py-4' + (depth === 0 ? ' border-b border-gray-100 dark:border-gray-700/50' : '') + '">' +
+        '<div class="flex items-center gap-2 mb-2">' +
+          '<div class="w-8 h-8 rounded-full bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold">' + (c.author_name || 'A')[0].toUpperCase() + '</div>' +
+          '<span class="font-medium text-gray-900 dark:text-white text-sm">' + escapeHtml(c.author_name) + '</span>' +
+          '<span class="text-xs text-gray-400">' + date + '</span>' +
+        '</div>' +
+        '<p class="text-gray-600 dark:text-gray-300 text-sm ml-10">' + escapeHtml(c.content) + '</p>' +
+        '<button onclick="window.replyTo(' + c.id + ', \'' + escapeHtml(c.author_name).replace(/'/g,"\\&apos;") + '\')" class="ml-10 mt-2 text-xs text-blue-500 hover:text-blue-600">Reply</button>';
+      var replies = childrenMap[c.id] || [];
+      if (replies.length > 0) {
+        html += '<div class="ml-8 pl-4 mt-2 border-l-2 border-gray-200 dark:border-gray-600">' +
+          replies.map(function(r) { return renderComment(r, childrenMap, depth + 1); }).join('') +
+          '</div>';
+      }
+      html += '</div>';
+      return html;
+    }
+
+    function escapeHtml(t) {
+      var d = document.createElement('div');
+      d.textContent = t || '';
+      return d.innerHTML;
+    }
+
+    window.replyTo = function(id, name) {
+      document.getElementById('parent-id').value = id;
+      var indicator = document.getElementById('reply-indicator');
+      indicator.classList.remove('hidden');
+      indicator.classList.add('flex');
+      indicator.querySelector('span').textContent = 'Replying to ' + name;
+      document.getElementById('comment-content').focus();
+    };
+
+    document.getElementById('cancel-reply')?.addEventListener('click', function() {
+      document.getElementById('parent-id').value = '';
+      var indicator = document.getElementById('reply-indicator');
+      indicator.classList.add('hidden');
+      indicator.classList.remove('flex');
+    });
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var status = document.getElementById('comment-status');
+      var btn = document.getElementById('submit-comment');
+      btn.disabled = true;
+      btn.textContent = 'Posting...';
+      status.textContent = '';
+
+      try {
+        var res = await fetch('/api/comments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            blog_post_id: Number(postId),
+            parent_id: document.getElementById('parent-id').value ? Number(document.getElementById('parent-id').value) : undefined,
+            author_name: document.getElementById('comment-name').value.trim(),
+            author_email: document.getElementById('comment-email').value.trim() || undefined,
+            content: document.getElementById('comment-content').value.trim(),
+          }),
+        });
+        var data = await res.json();
+        if (data.success) {
+          status.className = 'text-sm text-green-600';
+          status.textContent = 'Comment posted! It will appear after moderation.';
+          document.getElementById('comment-content').value = '';
+          document.getElementById('parent-id').value = '';
+          document.getElementById('reply-indicator')?.classList.add('hidden');
+          await loadComments();
+        } else {
+          status.className = 'text-sm text-red-600';
+          status.textContent = data.error || 'Failed to post comment.';
+        }
+      } catch {
+        status.className = 'text-sm text-red-600';
+        status.textContent = 'Error posting comment.';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Post Comment';
+      }
+    });
+
+    loadComments();
+  })();
+</script>

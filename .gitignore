@@ -20,6 +20,7 @@
 .env
 .env.local
 .env.*.local
+.dev.vars
 
 # Build outputs
 /dist/
