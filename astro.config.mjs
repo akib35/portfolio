@@ -5,7 +5,7 @@ import mdx from '@astrojs/mdx';
 import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
-  site: 'https://akib35.me',
+  site: 'https://blog.akib35.me',
   adapter: cloudflare({
     platformProxy: {
       enabled: true,

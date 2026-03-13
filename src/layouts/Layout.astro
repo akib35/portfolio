@@ -3,7 +3,6 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import { siteConfig } from '../config';
-import myPic from '../assets/my-pic.png';
 
 interface Props {
   title: string;
@@ -13,8 +12,8 @@ interface Props {
 
 const { 
   title, 
-  description = "Full Stack Developer specializing in web technologies. View my portfolio and projects.",
-  image = myPic.src
+  description = "Minimal notes on software engineering, systems, and web development.",
+  image = '/og-default.png'
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -37,15 +36,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         } else {
           document.documentElement.classList.remove('dark');
         }
-
-        // Seasonal theme detection
-        var month = new Date().getMonth(); // 0-11
-        var season;
-        if (month >= 2 && month <= 4) season = 'spring';
-        else if (month >= 5 && month <= 7) season = 'summer';
-        else if (month >= 8 && month <= 10) season = 'autumn';
-        else season = 'winter';
-        document.documentElement.dataset.season = season;
       })();
     </script>
 
@@ -54,7 +44,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="title" content={title} />
     <meta name="description" content={description} />
     <meta name="author" content={siteConfig.name} />
-    <meta name="keywords" content="web developer, full stack developer, portfolio, Md Akib Hasan, React, Astro, JavaScript, TypeScript" />
+    <meta name="keywords" content="blog, software engineering, web development, astro, cloudflare" />
 
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
@@ -80,14 +70,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
     <!-- Theme Color -->
-    <meta name="theme-color" content="#2563eb" />
+    <meta name="theme-color" content="#101828" />
     <meta name="color-scheme" content="light dark" />
 
     <!-- Robots -->
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow" />
   </head>
-  <body class="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+  <body class="flex flex-col min-h-screen transition-colors duration-200">
     <Header />
     <main class="grow">
       <slot />

@@ -1,93 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap');
 @import "tailwindcss";
 
 /* Tailwind v4: class-based dark mode */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Theme extensions */
 @theme {
-  --color-primary: #1D4ED8;
-  --color-secondary: #9333EA;
-  --color-accent: #FBBF24;
-  --color-background: #F9FAFB;
-  --color-text: #111827;
-}
-
-/* ===== Seasonal Themes ===== */
-/* Spring: March-May — fresh greens and pinks */
-html[data-season="spring"] {
-  --season-from: #ecfdf5;
-  --season-via: #fdf2f8;
-  --season-to: #ecfdf5;
-  --season-accent: #10b981;
-  --season-accent-light: #d1fae5;
-}
-html[data-season="spring"].dark {
-  --season-from: #022c22;
-  --season-via: #1a0a14;
-  --season-to: #022c22;
-  --season-accent: #34d399;
-  --season-accent-light: #065f46;
-}
-
-/* Summer: June-Aug — warm yellows and oranges */
-html[data-season="summer"] {
-  --season-from: #fffbeb;
-  --season-via: #fff7ed;
-  --season-to: #fefce8;
-  --season-accent: #f59e0b;
-  --season-accent-light: #fef3c7;
-}
-html[data-season="summer"].dark {
-  --season-from: #1c1a00;
-  --season-via: #1a1000;
-  --season-to: #1c1a00;
-  --season-accent: #fbbf24;
-  --season-accent-light: #78350f;
-}
-
-/* Autumn: Sept-Nov — warm oranges and reds */
-html[data-season="autumn"] {
-  --season-from: #fff7ed;
-  --season-via: #fef2f2;
-  --season-to: #fefce8;
-  --season-accent: #ea580c;
-  --season-accent-light: #fed7aa;
-}
-html[data-season="autumn"].dark {
-  --season-from: #1a0f00;
-  --season-via: #1a0505;
-  --season-to: #1a1400;
-  --season-accent: #fb923c;
-  --season-accent-light: #7c2d12;
-}
-
-/* Winter: Dec-Feb — cool blues and purples (default matches existing) */
-html[data-season="winter"] {
-  --season-from: #eff6ff;
-  --season-via: #f5f3ff;
-  --season-to: #eff6ff;
-  --season-accent: #3b82f6;
-  --season-accent-light: #dbeafe;
-}
-html[data-season="winter"].dark {
-  --season-from: #0a1628;
-  --season-via: #0f0a1e;
-  --season-to: #0a1628;
-  --season-accent: #60a5fa;
-  --season-accent-light: #1e3a5f;
-}
-
-/* Seasonal hero gradient overlay */
-.season-gradient {
-  background: linear-gradient(135deg, var(--season-from), var(--season-via), var(--season-to));
-}
-
-.season-accent {
-  color: var(--season-accent);
-}
-
-.season-accent-bg {
-  background-color: var(--season-accent-light);
+  --font-body: "IBM Plex Sans", ui-sans-serif, system-ui;
+  --font-display: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas;
 }
 
 @layer base {
@@ -96,228 +15,52 @@ html[data-season="winter"].dark {
   }
 
   body {
-    @apply bg-gray-50 text-gray-900 font-sans antialiased transition-colors duration-200;
+    font-family: var(--font-body);
+    background:
+      radial-gradient(circle at 15% 10%, rgba(148, 163, 184, 0.2), transparent 45%),
+      radial-gradient(circle at 85% 0%, rgba(186, 230, 253, 0.2), transparent 35%),
+      linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+    @apply text-slate-900 antialiased transition-colors duration-200;
   }
 
-  .dark body,
   html.dark body {
-    @apply bg-gray-900 text-gray-100;
+    background:
+      radial-gradient(circle at 20% 0%, rgba(59, 130, 246, 0.18), transparent 45%),
+      radial-gradient(circle at 100% 10%, rgba(2, 132, 199, 0.12), transparent 35%),
+      linear-gradient(180deg, #020617 0%, #0b1220 100%);
+    @apply text-slate-100;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold text-gray-800 dark:text-gray-100;
+    font-family: var(--font-display);
+    @apply text-slate-900 dark:text-slate-100;
   }
 
-  a:not(.btn):not(.no-underline):not([class*="bg-"]) {
-    @apply text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors;
+  code,
+  pre,
+  .mono {
+    font-family: var(--font-display);
   }
 }
 
 @layer components {
   .container {
-    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-4xl mx-auto px-4 sm:px-6;
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 no-underline;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline;
   }
 
   .btn-primary {
-    @apply bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30;
+    @apply bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white text-white;
   }
 
-  .btn-secondary {
-    @apply bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700;
-  }
-
-  .btn-outline {
-    @apply border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 bg-transparent;
-  }
-
-  /* Card styles */
   .card {
-    @apply bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700/50 shadow-lg shadow-gray-200/50 dark:shadow-none transition-all duration-300;
+    @apply bg-white/80 dark:bg-slate-900/70 border border-slate-200/90 dark:border-slate-700/60 rounded-xl;
   }
 
-  .card-hover {
-    @apply hover:shadow-xl hover:shadow-gray-200/70 dark:hover:shadow-none hover:-translate-y-1;
-  }
-
-  /* Section heading styles */
-  .section-badge {
-    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium;
-  }
-
-  .section-title {
-    @apply text-3xl md:text-4xl font-bold text-gray-900 dark:text-white;
-  }
-
-  .section-description {
-    @apply text-lg text-gray-600 dark:text-gray-400;
-  }
-
-  /* Gradient text */
-  .gradient-text {
-    @apply bg-linear-to-r from-blue-600 via-purple-600 to-pink-500 bg-clip-text text-transparent;
-  }
-
-  /* Glass effect */
-  .glass {
-    @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl;
-  }
-}
-
-/* ===== CUSTOM CURSOR SYSTEM ===== */
-
-/* Banana Cursor (Default) */
-html.cursor-banana,
-html.cursor-banana * {
-  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><text y='24' font-size='24'>🍌</text></svg>") 8 8, auto !important;
-}
-
-/* Rocket Cursor */
-html.cursor-rocket,
-html.cursor-rocket * {
-  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><text y='24' font-size='24'>🚀</text></svg>") 8 8, auto !important;
-}
-
-/* Water Cursor */
-html.cursor-water,
-html.cursor-water * {
-  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><text y='24' font-size='24'>💧</text></svg>") 8 8, auto !important;
-}
-
-/* ===== CLICK ANIMATIONS ===== */
-
-/* Banana - Yellow Ripple */
-.click-ripple-banana {
-  position: fixed;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, rgba(255, 193, 7, 0.3) 50%, transparent 70%);
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(0);
-  animation: ripple-expand 0.6s ease-out forwards;
-  z-index: 9999;
-}
-
-@keyframes ripple-expand {
-  0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(4);
-    opacity: 0;
-  }
-}
-
-/* Rocket - Smoke Trail */
-.click-smoke-rocket {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-.smoke-particle {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(200, 200, 200, 0.8) 0%, rgba(150, 150, 150, 0.4) 50%, transparent 70%);
-  animation: smoke-rise 1s ease-out forwards;
-}
-
-@keyframes smoke-rise {
-  0% {
-    transform: translate(-50%, -50%) scale(0.5);
-    opacity: 0.8;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    transform: translate(-50%, calc(-50% - 60px)) scale(2);
-    opacity: 0;
-  }
-}
-
-/* Continuous smoke trail for rocket */
-.rocket-trail {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 140, 0, 0.6) 0%, rgba(200, 200, 200, 0.4) 50%, transparent 70%);
-  pointer-events: none;
-  z-index: 9998;
-  animation: trail-fade 0.5s ease-out forwards;
-}
-
-@keyframes trail-fade {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.6;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(0.3);
-    opacity: 0;
-  }
-}
-
-/* Water - Splash/Ripple Effect */
-.click-splash-water {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-.water-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 2px solid rgba(59, 130, 246, 0.6);
-  transform: translate(-50%, -50%) scale(0);
-  animation: water-ripple 0.8s ease-out forwards;
-}
-
-.water-ring:nth-child(1) { animation-delay: 0s; }
-.water-ring:nth-child(2) { animation-delay: 0.15s; }
-.water-ring:nth-child(3) { animation-delay: 0.3s; }
-
-@keyframes water-ripple {
-  0% {
-    width: 10px;
-    height: 10px;
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(0);
-  }
-  100% {
-    width: 80px;
-    height: 80px;
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-
-.water-droplet {
-  position: absolute;
-  width: 6px;
-  height: 8px;
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.7) 0%, rgba(147, 197, 253, 0.5) 100%);
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  animation: droplet-splash 0.6s ease-out forwards;
-}
-
-@keyframes droplet-splash {
-  0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0;
+  .chip {
+    @apply inline-flex items-center rounded-full border border-slate-300 dark:border-slate-700 px-2.5 py-1 text-xs text-slate-600 dark:text-slate-300;
   }
 }

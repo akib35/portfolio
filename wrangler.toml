@@ -1,11 +1,11 @@
-name = "portfolio"
+name = "akib35-blog"
 compatibility_date = "2024-01-01"
 pages_build_output_dir = "dist"
 
 # Environment variables
 [vars]
 CONTACT_EMAIL = "contact@akib35.me"
-SITE_URL = "https://akib35.me"
+SITE_URL = "https://blog.akib35.me"
 PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAACMqP-_QKElZMAeg"
 PUBLIC_FORMSPREE_ID = "mnjjnbkl"
 

@@ -1,5 +1,4 @@
 export const siteConfig = {
-  
   name: "Akib Hasan",
   email: "contact@akib35.me",
   phone: "+1 234 567 8900",
@@ -25,8 +24,8 @@ export const siteConfig = {
   },
 
   site: {
-    title: "Md Akib Hasan - Portfolio",
-    description: "Full Stack Developer specializing in web technologies",
-    url: "https://akib35.me",
+    title: "akib35 blog",
+    description: "Developer-focused writing on software engineering and the web.",
+    url: "https://blog.akib35.me",
   }
 };
